@@ -1,0 +1,10 @@
+kind: observation
+namespace: omniform
+name: resource-active
+version: 0.1.0
+maturity: experimental
+requires:
+  omniform: ">=0.1"
+contains:
+  observations:
+    - resource_active
