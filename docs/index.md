@@ -6,5 +6,6 @@ Omniform defines portable Company-as-Code meaning. Choose a path:
 - **Enterprise or business architect:** read the [core specification](../spec/README.md) and contribute reusable knowledge under `library/`.
 - **Developer, AI-agent builder, or integration author:** use the [schemas](../schemas/omniform.schema.json), [conformance guide](reference/conformance.md), and fixtures.
 - **Contributor:** read [CONTRIBUTING](../CONTRIBUTING.md), governance, RFCs, and ADRs.
+- **Founder or founding-system builder:** see [how a reviewed draft becomes Omniform](guides/founding-to-omniform.md).
 
 The files in this repository are canonical. Published pages identify the source revision through the GitHub Pages deployment.
