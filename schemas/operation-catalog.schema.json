@@ -1,0 +1,14 @@
+{
+  "$schema":"https://json-schema.org/draft/2020-12/schema",
+  "$id":"https://omniform.dev/schemas/operation-catalog.schema.json",
+  "title":"Omniform Operation Catalogue",
+  "type":"object",
+  "additionalProperties":false,
+  "required":["omniform","catalogVersion","capabilities","operations"],
+  "properties":{
+    "omniform":{"const":"0.1"},
+    "catalogVersion":{"type":"string"},
+    "capabilities":{"type":"array","items":{"type":"object","additionalProperties":false,"required":["id","name","description","operations"],"properties":{"id":{"type":"string"},"name":{"type":"string"},"description":{"type":"string"},"operations":{"type":"array","items":{"type":"string"},"uniqueItems":true}}}},
+    "operations":{"type":"array","items":{"$ref":"operation.schema.json"}}
+  }
+}

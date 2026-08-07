@@ -13,7 +13,7 @@ function validate(document) {
   for (const capability of company?.capabilities || []) {
     if (!id.test(capability.id || '') || !capability.name || typeof capability.required !== 'boolean') errors.push(`invalid capability ${capability.id || '<unknown>'}`);
     if ('status' in capability) errors.push('desired capabilities cannot contain runtime status');
-    const allowed = ['id','name','purpose','required','outcomes'];
+    const allowed = ['id','name','purpose','required','outcomes','operations'];
     if (Object.keys(capability).some(key => !allowed.includes(key))) errors.push(`unknown capability property on ${capability.id}`);
   }
   for (const resource of company?.resources || []) {
@@ -28,6 +28,13 @@ function validate(document) {
   }
   return errors;
 }
+function validateCatalog(catalog){
+  const errors=[];const capabilityIds=new Set((catalog?.capabilities||[]).map(item=>item.id));const operationIds=new Set((catalog?.operations||[]).map(item=>item.id));
+  if(catalog?.omniform!=='0.1'||!catalog?.catalogVersion)errors.push('operation catalog identity and version are required');
+  for(const capability of catalog?.capabilities||[])for(const operation of capability.operations||[])if(!operationIds.has(operation))errors.push(`capability ${capability.id} references missing operation ${operation}`);
+  for(const operation of catalog?.operations||[]){if(!id.test(operation.id||'')||!/^\d+\.\d+\.\d+$/.test(operation.version||''))errors.push(`operation ${operation.id||'<unknown>'} requires an id and semantic version`);if(!capabilityIds.has(operation.capability))errors.push(`operation ${operation.id} references missing capability ${operation.capability}`);if(typeof operation.mutation!=='boolean'||!operation.input||!operation.output||!Array.isArray(operation.permissions)||!operation.approval?.mode||!Array.isArray(operation.interfaces))errors.push(`operation ${operation.id} contract is incomplete`);}
+  return errors;
+}
 for (const relative of ['examples/minimal/company.json','examples/startup/company.json','examples/enterprise/company.json','examples/founding-saas/company.json','conformance/valid/missing-required-capability.json','conformance/valid/extensible-observation-type.json']) {
   const errors = validate(read(relative));
   if (errors.length) throw new Error(`${relative}: ${errors.join('; ')}`);
@@ -35,4 +42,6 @@ for (const relative of ['examples/minimal/company.json','examples/startup/compan
 for (const relative of ['conformance/invalid/runtime-state-in-desired.json','conformance/invalid/observation-without-condition.json']) {
   if (!validate(read(relative)).length) throw new Error(`${relative}: expected invalid fixture to fail`);
 }
-console.log('Validated 4 examples, 2 valid fixtures, and 2 invalid fixtures.');
+for(const relative of ['contracts/core.operations.json','conformance/valid/operation-catalog.json']){const errors=validateCatalog(read(relative));if(errors.length)throw new Error(`${relative}: ${errors.join('; ')}`)}
+if(!validateCatalog(read('conformance/invalid/operation-without-capability.json')).length)throw new Error('invalid operation catalogue fixture must fail');
+console.log('Validated 4 examples, company fixtures, and versioned operation catalogues.');

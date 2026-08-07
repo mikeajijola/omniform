@@ -9,5 +9,6 @@ Omniform owns the portable specification and knowledge commons. Read `README.md`
 - Observation definitions, including semantic observations, belong here; execution, findings, and presentation do not.
 - Use an RFC for substantive semantics. Library contributions intentionally have a lighter path.
 - Give important concepts readable documentation and structured representations where appropriate.
+- Treat Omniform operation definitions as the generative semantic source for runtime registries, interface metadata, tools, CLI/API contracts, and reference docs. Keep handlers and presentation implementations downstream.
 - Make the smallest coherent change; update schemas, fixtures, examples, and tests when semantics change.
 - Run `npm test && npm run docs:check` and report the evidence. Do not duplicate responsibilities owned by OmniSeed or OmniSeed OS.
