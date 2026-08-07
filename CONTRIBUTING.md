@@ -8,4 +8,4 @@ Domain knowledge is as welcome as code. Start by choosing the owning layer in th
 4. Run `npm test && npm run docs:check`.
 5. Open a pull request explaining outcome, actors considered, and evidence.
 
-Library maturity is `experimental`, `community`, `reviewed`, or `reference`; experimental work is not held to core-spec governance. Please follow the [Code of Conduct](CODE_OF_CONDUCT.md).
+Commons directories cover capabilities, policies, observations, semantic observations, evidence models, and viewpoints. Library maturity is `experimental`, `community`, `reviewed`, or `reference`; experimental work is not held to core-spec governance. Please follow the [Code of Conduct](CODE_OF_CONDUCT.md).

@@ -20,13 +20,19 @@ function validate(document) {
     if (!['agent','person','team','workflow','connector','system','partner','entity'].includes(resource.category)) errors.push(`invalid resource category ${resource.category}`);
     if (!Array.isArray(resource.realises)) errors.push(`resource ${resource.id} must declare realises`);
   }
+  for (const observation of company?.observations || []) {
+    if (!id.test(observation.id || '')) errors.push('observation id is invalid');
+    if (!/^[a-z][a-z0-9-]*$/.test(observation.type || '')) errors.push(`observation ${observation.id} type is invalid`);
+    if (!id.test(observation.capability || '')) errors.push(`observation ${observation.id} capability is invalid`);
+    if (!observation.condition || typeof observation.condition !== 'object' || Array.isArray(observation.condition) || !Object.keys(observation.condition).length) errors.push(`observation ${observation.id} condition is required`);
+  }
   return errors;
 }
-for (const relative of ['examples/minimal/company.json','examples/startup/company.json','examples/enterprise/company.json','conformance/valid/missing-required-capability.json']) {
+for (const relative of ['examples/minimal/company.json','examples/startup/company.json','examples/enterprise/company.json','conformance/valid/missing-required-capability.json','conformance/valid/extensible-observation-type.json']) {
   const errors = validate(read(relative));
   if (errors.length) throw new Error(`${relative}: ${errors.join('; ')}`);
 }
-for (const relative of ['conformance/invalid/runtime-state-in-desired.json']) {
+for (const relative of ['conformance/invalid/runtime-state-in-desired.json','conformance/invalid/observation-without-condition.json']) {
   if (!validate(read(relative)).length) throw new Error(`${relative}: expected invalid fixture to fail`);
 }
-console.log('Validated 3 examples, 1 valid fixture, and 1 invalid fixture.');
+console.log('Validated 3 examples, 2 valid fixtures, and 2 invalid fixtures.');

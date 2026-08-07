@@ -1,6 +1,8 @@
 # Omniform
 
-**Omniform is the open Company-as-Code specification and organisational knowledge commons.** It defines what a portable company model means, independently of any runtime or user interface.
+**Omniform is the open Company-as-Code specification and commons.** It defines what a portable company model means and hosts reusable organisational knowledge, independently of any runtime or user interface.
+
+> **Licensing blocker:** the repository is public but has no explicit license yet. Until maintainers select one, the source is publicly readable but not licensed for reuse as open source. Track the decision in the repository issue tracker.
 
 ```
 Omniform (meaning) → OmniSeed (execution) → OmniSeed OS (interaction)
@@ -19,7 +21,7 @@ It is for founders and domain experts describing organisations, architects build
 | Change | Repository / location |
 | --- | --- |
 | Company-as-Code semantics, state semantics, core primitive | Omniform `spec/`, normally through an RFC |
-| Reusable capability, policy, evidence model, semantic monitor | Omniform `library/` |
+| Reusable capability, policy, observation, semantic observation, evidence model, viewpoint | Omniform `library/` |
 | Validation, planning, state, apply, CLI | OmniSeed |
 | External integration/provider | OmniSeed provider contracts |
 | Operating experience, accessibility, actor interfaces | OmniSeed OS, preserving shared capabilities |

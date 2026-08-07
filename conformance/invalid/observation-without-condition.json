@@ -1,0 +1,1 @@
+{"omniform":"0.1","company":{"id":"invalid_observation","name":"Invalid Observation","purpose":"Must fail","capabilities":[{"id":"support","name":"Support","required":true}],"observations":[{"id":"support_active","type":"assertion","capability":"support"}]}}
