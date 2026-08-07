@@ -28,11 +28,11 @@ function validate(document) {
   }
   return errors;
 }
-for (const relative of ['examples/minimal/company.json','examples/startup/company.json','examples/enterprise/company.json','conformance/valid/missing-required-capability.json','conformance/valid/extensible-observation-type.json']) {
+for (const relative of ['examples/minimal/company.json','examples/startup/company.json','examples/enterprise/company.json','examples/founding-saas/company.json','conformance/valid/missing-required-capability.json','conformance/valid/extensible-observation-type.json']) {
   const errors = validate(read(relative));
   if (errors.length) throw new Error(`${relative}: ${errors.join('; ')}`);
 }
 for (const relative of ['conformance/invalid/runtime-state-in-desired.json','conformance/invalid/observation-without-condition.json']) {
   if (!validate(read(relative)).length) throw new Error(`${relative}: expected invalid fixture to fail`);
 }
-console.log('Validated 3 examples, 2 valid fixtures, and 2 invalid fixtures.');
+console.log('Validated 4 examples, 2 valid fixtures, and 2 invalid fixtures.');
