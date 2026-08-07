@@ -1,0 +1,19 @@
+name: Specification or capability proposal
+description: Propose portable semantics or reusable knowledge
+labels: ["type:proposal", "status:needs-discussion"]
+body:
+  - type: dropdown
+    id: kind
+    attributes: {label: Kind, options: ["Core specification", "Reusable capability", "Policy", "Semantic monitor", "Evidence model"]}
+    validations: {required: true}
+  - type: textarea
+    id: outcome
+    attributes: {label: Capability or outcome, description: Describe what can happen without tying it to an actor or UI.}
+    validations: {required: true}
+  - type: textarea
+    id: separation
+    attributes: {label: Concept separation, description: Identify actor, interface, implementation, policy, state, and evidence implications.}
+    validations: {required: true}
+  - type: textarea
+    id: machine
+    attributes: {label: Machine-readable contract}

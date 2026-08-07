@@ -1,0 +1,6 @@
+{
+  "$schema":"https://json-schema.org/draft/2020-12/schema",
+  "$id":"https://omniform.dev/schemas/omniform.schema.json",
+  "title":"Omniform Company Definition","type":"object","required":["omniform","company"],"additionalProperties":false,
+  "properties":{"omniform":{"const":"0.1"},"company":{"$ref":"company.schema.json"}}
+}

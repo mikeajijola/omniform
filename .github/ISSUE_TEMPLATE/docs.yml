@@ -1,0 +1,12 @@
+name: Documentation improvement
+description: Improve learning, reference, examples, or accessibility
+labels: ["type:documentation", "area:docs"]
+body:
+  - type: textarea
+    id: audience
+    attributes: {label: Audience and need}
+    validations: {required: true}
+  - type: textarea
+    id: change
+    attributes: {label: Suggested change}
+    validations: {required: true}

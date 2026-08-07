@@ -1,0 +1,1 @@
+{"name":"@omniform/spec","version":"0.1.0","private":true,"description":"Omniform schema and conformance checks","scripts":{"test":"node scripts/conformance.mjs","docs:check":"node scripts/check-links.mjs"},"engines":{"node":">=20"}}
