@@ -1,0 +1,6 @@
+{
+  "$schema":"https://json-schema.org/draft/2020-12/schema","$id":"https://omniform.dev/schemas/company.schema.json","type":"object","additionalProperties":false,
+  "required":["id","name","purpose","capabilities"],
+  "properties":{"id":{"$ref":"#/$defs/id"},"name":{"type":"string","minLength":1},"purpose":{"type":"string","minLength":1},"outcomes":{"type":"array","items":{"type":"object","required":["id","description"],"additionalProperties":false,"properties":{"id":{"$ref":"#/$defs/id"},"description":{"type":"string","minLength":1}}}},"capabilities":{"type":"array","items":{"$ref":"capability.schema.json"}},"resources":{"type":"array","items":{"$ref":"resource.schema.json"}},"policies":{"type":"array","items":{"$ref":"policy.schema.json"}},"semanticMonitors":{"type":"array","items":{"$ref":"semantic-monitor.schema.json"}}},
+  "$defs":{"id":{"type":"string","pattern":"^[a-z][a-z0-9_-]*$"}}
+}
