@@ -1,0 +1,24 @@
+kind: capability-realisation
+namespace: omniform
+name: customer-support-agent-first
+version: 0.1.0
+maturity: experimental
+
+capability: customer_support
+requirements:
+  - receive_customer_request
+  - understand_customer_request
+  - access_customer_context
+  - communicate_response
+  - escalate_exception
+
+suggests:
+  resources: [support_agent]
+  skills: [classify_support_request, retrieve_customer_context, draft_response]
+  connectors: [customer_email, customer_record]
+  workflows: [support_request]
+  observations: [customer_frustration, cancellation_intent]
+
+notes:
+  - Resources are proposals, not deployed state.
+  - Financial or legal authority remains an explicit requirement when policy requires it.

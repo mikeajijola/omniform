@@ -1,0 +1,22 @@
+{
+  "omniform":"0.1",
+  "company":{
+    "id":"acme_support","name":"Acme Support","purpose":"Support customers safely and autonomously where possible",
+    "outcomes":[{"id":"customers_supported","description":"Customers receive useful and policy-compliant support"}],
+    "capabilities":[{"id":"customer_support","name":"Customer Support","purpose":"Receive, understand, and resolve customer requests","required":true,"outcomes":["customers_supported"],"requirements":[{"capability":"receive_customer_request","required":true},{"capability":"understand_customer_request","required":true},{"capability":"access_customer_context","required":true},{"capability":"communicate_response","required":true},{"capability":"approve_large_refund","required":true,"humanAuthority":{"reason":"Refunds above £500 require explicitly delegated financial authority","qualification":"authorised refund approver"}}]}],
+    "resources":[
+      {"id":"support_agent","name":"Support Agent","category":"agent","realises":["customer_support"],"offers":["understand_customer_request","access_customer_context"],"skills":["classify_support_request","retrieve_customer_context","draft_response"],"connectors":["gmail","crm"],"workflows":["support_request"],"authority":["draft_customer_response"],"runtime":"agent-runtime","memoryBoundary":"company-support","desired":true},
+      {"id":"gmail","name":"Gmail Connector","category":"connector","realises":["customer_support"],"offers":["receive_customer_request","communicate_response"],"desired":true},
+      {"id":"crm","name":"CRM Connector","category":"connector","realises":["customer_support"],"offers":["access_customer_context"],"desired":true},
+      {"id":"support_request","name":"Support Request Workflow","category":"workflow","realises":["customer_support"],"offers":["receive_customer_request","understand_customer_request","access_customer_context","communicate_response"],"desired":true}
+    ],
+    "skills":[{"id":"classify_support_request","name":"Classify support request","kind":"semantic","offers":["understand_customer_request"]},{"id":"retrieve_customer_context","name":"Retrieve customer context","kind":"deterministic","offers":["access_customer_context"]},{"id":"draft_response","name":"Draft response","kind":"semantic","offers":["communicate_response"]}],
+    "connectors":[{"id":"gmail","name":"Gmail","offers":["receive_customer_request","communicate_response"],"permissions":["read_support_mail","send_support_mail"],"dataBoundaries":["support-mailbox"],"provider":"google-workspace"},{"id":"crm","name":"CRM","offers":["access_customer_context"],"permissions":["read_customer_record"],"dataBoundaries":["customer-support-fields"],"provider":"crm-provider"}],
+    "workflows":[{"id":"support_request","name":"Support request workflow","offers":["receive_customer_request","understand_customer_request","access_customer_context","communicate_response"],"steps":[{"id":"receive","type":"operation","invokes":"receive_customer_request"},{"id":"classify","type":"agent","invokes":"classify_support_request"},{"id":"context","type":"operation","invokes":"access_customer_context"},{"id":"policy","type":"approval","policy":"refund_authority"},{"id":"respond","type":"operation","invokes":"communicate_response"}]}],
+    "schedules":[{"id":"support_health_review","name":"Review support health","cadence":{"type":"interval","duration":"PT4H"},"invokes":{"observation":"customer_frustration"}}],
+    "realisations":[{"id":"customer_support_agent_first","capability":"customer_support","resources":["support_agent","gmail","crm","support_request"],"skills":["classify_support_request","retrieve_customer_context","draft_response"],"connectors":["gmail","crm"],"workflows":["support_request"],"schedules":["support_health_review"],"observations":["customer_frustration"],"policies":["refund_authority"],"maturity":"selected"}],
+    "strategy":{"autonomyTarget":"maximum","realisationPreference":["agent","workflow","system","machine","external-service","person","partner"]},
+    "policies":[{"id":"refund_authority","rule":"Refunds above £500 require an authorised approver","appliesTo":["customer_support","approve_large_refund"]}],
+    "observations":[{"id":"customer_frustration","type":"semantic","capability":"customer_support","condition":{"meaning":"customer expresses unresolved frustration"},"evidenceRequirements":["support_messages"],"responses":["notify-agent","generate-plan"]}]
+  }
+}

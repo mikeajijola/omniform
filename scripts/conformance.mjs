@@ -13,12 +13,13 @@ function validate(document) {
   for (const capability of company?.capabilities || []) {
     if (!id.test(capability.id || '') || !capability.name || typeof capability.required !== 'boolean') errors.push(`invalid capability ${capability.id || '<unknown>'}`);
     if ('status' in capability) errors.push('desired capabilities cannot contain runtime status');
-    const allowed = ['id','name','purpose','required','outcomes','operations'];
+    const allowed = ['id','name','purpose','required','outcomes','operations','requirements','gapPolicy'];
     if (Object.keys(capability).some(key => !allowed.includes(key))) errors.push(`unknown capability property on ${capability.id}`);
   }
   for (const resource of company?.resources || []) {
-    if (!['agent','person','team','workflow','connector','system','partner','entity'].includes(resource.category)) errors.push(`invalid resource category ${resource.category}`);
+    if (!['agent','person','team','workflow','connector','system','partner','entity','machine'].includes(resource.category)) errors.push(`invalid resource category ${resource.category}`);
     if (!Array.isArray(resource.realises)) errors.push(`resource ${resource.id} must declare realises`);
+    if(resource.offers&&!Array.isArray(resource.offers))errors.push(`resource ${resource.id} offers must be an array`);
   }
   for (const observation of company?.observations || []) {
     if (!id.test(observation.id || '')) errors.push('observation id is invalid');
@@ -26,6 +27,8 @@ function validate(document) {
     if (!id.test(observation.capability || '')) errors.push(`observation ${observation.id} capability is invalid`);
     if (!observation.condition || typeof observation.condition !== 'object' || Array.isArray(observation.condition) || !Object.keys(observation.condition).length) errors.push(`observation ${observation.id} condition is required`);
   }
+  for(const schedule of company?.schedules||[]){if(!id.test(schedule.id||'')||!['cron','interval','calendar','one-shot'].includes(schedule.cadence?.type)||Object.keys(schedule.invokes||{}).length!==1)errors.push(`invalid schedule ${schedule.id||'<unknown>'}`)}
+  for(const realisation of company?.realisations||[]){if(!id.test(realisation.id||'')||!id.test(realisation.capability||'')||!Array.isArray(realisation.resources))errors.push(`invalid capability realisation ${realisation.id||'<unknown>'}`)}
   return errors;
 }
 function validateCatalog(catalog){
@@ -35,7 +38,7 @@ function validateCatalog(catalog){
   for(const operation of catalog?.operations||[]){if(!id.test(operation.id||'')||!/^\d+\.\d+\.\d+$/.test(operation.version||''))errors.push(`operation ${operation.id||'<unknown>'} requires an id and semantic version`);if(!capabilityIds.has(operation.capability))errors.push(`operation ${operation.id} references missing capability ${operation.capability}`);if(typeof operation.mutation!=='boolean'||!operation.input||!operation.output||!Array.isArray(operation.permissions)||!operation.approval?.mode||!Array.isArray(operation.interfaces))errors.push(`operation ${operation.id} contract is incomplete`);}
   return errors;
 }
-for (const relative of ['examples/minimal/company.json','examples/startup/company.json','examples/enterprise/company.json','examples/founding-saas/company.json','conformance/valid/missing-required-capability.json','conformance/valid/extensible-observation-type.json']) {
+for (const relative of ['examples/minimal/company.json','examples/startup/company.json','examples/enterprise/company.json','examples/founding-saas/company.json','examples/capability-realisation/company.json','conformance/valid/missing-required-capability.json','conformance/valid/extensible-observation-type.json']) {
   const errors = validate(read(relative));
   if (errors.length) throw new Error(`${relative}: ${errors.join('; ')}`);
 }
