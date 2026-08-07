@@ -1,5 +1,7 @@
 # Omniform
 
+**Define once in Omniform. Execute through OmniSeed. Experience through any interface.**
+
 **Omniform is the open Company-as-Code specification and commons.** It defines what a portable company model means and hosts reusable organisational knowledge, independently of any runtime or user interface.
 
 > **Licensing blocker:** the repository is public but has no explicit license yet. Until maintainers select one, the source is publicly readable but not licensed for reuse as open source. Track the decision in the repository issue tracker.
