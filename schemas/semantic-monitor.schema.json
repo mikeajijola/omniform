@@ -1,1 +1,0 @@
-{"$schema":"https://json-schema.org/draft/2020-12/schema","$id":"https://omniform.dev/schemas/semantic-monitor.schema.json","title":"Deprecated SemanticMonitor compatibility schema","deprecated":true,"$comment":"Use observation.schema.json with type semantic.","$ref":"observation.schema.json"}
