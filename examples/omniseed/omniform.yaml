@@ -23,10 +23,10 @@ spec:
       name: Company Operating Environment
       autonomy: { mode: apply_low_risk }
       requires:
-        - { id: web_application_hosting }
-        - { id: production_deployment }
-        - { id: public_endpoint }
-        - { id: deployment_observation }
+        - { id: web_application_hosting, primitiveFamily: systems }
+        - { id: production_deployment, primitiveFamily: systems }
+        - { id: public_endpoint, primitiveFamily: systems }
+        - { id: deployment_observation, primitiveFamily: observations }
       realisation:
         resources: [omniseed_os, deployment_observation]
   resources:
@@ -45,3 +45,31 @@ spec:
         name: Lily
         offers: [inspect_company_state, generate_plan]
         spec: { operationalIdentity: company_steward }
+  operations:
+    - id: get_capability
+      capability: company_operating_environment
+      description: Get current capability truth.
+      input: { type: object, required: [capabilityId] }
+      output: { type: object }
+      mutation: false
+      permissions: [capability.read]
+      approval: none
+      interfaces: [lily, ui, api, cli, agent, machine]
+    - id: generate_plan
+      capability: company_operating_environment
+      description: Generate and persist a deterministic plan.
+      input: { type: object }
+      output: { type: object }
+      mutation: false
+      permissions: [plan.create]
+      approval: none
+      interfaces: [lily, ui, api, cli, agent]
+    - id: apply_plan
+      capability: company_operating_environment
+      description: Apply approved actions from the exact reviewed plan.
+      input: { type: object, required: [plan, approval] }
+      output: { type: object }
+      mutation: true
+      permissions: [plan.apply]
+      approval: required
+      interfaces: [ui, api, cli, agent]
