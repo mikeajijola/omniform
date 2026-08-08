@@ -1,1 +1,0 @@
-{"omniform":"0.1","company":{"id":"extensible_observation","name":"Extensible Observation","purpose":"Prove observation types can extend","capabilities":[{"id":"support","name":"Support","required":true}],"observations":[{"id":"regional_signal","type":"community-signal","capability":"support","condition":{"source":"community"}}]}}

@@ -1,1 +1,0 @@
-{"omniform":"0.1","catalogVersion":"0.1.0","capabilities":[],"operations":[{"id":"generate_plan","version":"0.1.0","name":"Generate plan","description":"Generate a plan.","capability":"missing","input":{"type":"object"},"output":{"type":"object"},"mutation":false,"permissions":[],"approval":{"mode":"none"},"interfaces":["api"]}]}

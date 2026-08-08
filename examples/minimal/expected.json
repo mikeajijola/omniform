@@ -1,1 +1,0 @@
-{"capabilities":{"customer_research":"realised","customer_support":"missing"},"nextPlan":{"changes":[{"action":"create","resource":"support_agent","capability":"customer_support"}]}}
