@@ -1,0 +1,47 @@
+apiVersion: omniform.org/v1alpha1
+kind: Company
+metadata:
+  id: omniseed
+  name: OmniSeed
+spec:
+  intent: Build and operate the open Company-as-Code ecosystem.
+  outcomes:
+    - id: autonomous_company_platform
+      description: Companies can be founded and operated from intent.
+  providers:
+    agents: { provider: reference_agents }
+    skills: { provider: omniseed }
+    connectors: { provider: reference_connectors }
+    workflows: { provider: omniseed }
+    schedules: { provider: reference_scheduler }
+    policies: { provider: omniseed }
+    observations: { provider: omniseed }
+    systems: { provider: local }
+    memory: { provider: local_memory }
+  capabilities:
+    - id: company_operating_environment
+      name: Company Operating Environment
+      autonomy: { mode: apply_low_risk }
+      requires:
+        - { id: web_application_hosting }
+        - { id: production_deployment }
+        - { id: public_endpoint }
+        - { id: deployment_observation }
+      realisation:
+        resources: [omniseed_os, deployment_observation]
+  resources:
+    systems:
+      - id: omniseed_os
+        name: OmniSeed OS
+        offers: [web_application_hosting, production_deployment, public_endpoint]
+        spec: { runtime: local }
+    observations:
+      - id: deployment_observation
+        name: Deployment Observation
+        offers: [deployment_observation]
+        spec: { type: external_state }
+    agents:
+      - id: company_steward
+        name: Lily
+        offers: [inspect_company_state, generate_plan]
+        spec: { operationalIdentity: company_steward }
