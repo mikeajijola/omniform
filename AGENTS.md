@@ -12,5 +12,7 @@ Omniform owns the portable specification and knowledge commons. Read `README.md`
 - Give important concepts readable documentation and structured representations where appropriate.
 - Treat Omniform operation definitions as the generative semantic source for runtime registries, interface metadata, tools, CLI/API contracts, and reference docs. Keep handlers and presentation implementations downstream.
 - Do not introduce a resource abstraction that competes with Capability. Agents, Skills, Connectors, Workflows, Schedules, Providers, People, and Machines exist to realise capabilities; natural language must hand off structured capability intent to governed deterministic execution.
+- Capability is primary and resources realise capabilities through explicit offerings. Connector is first-class and remains distinct from Provider; providers implement only the Omniform primitives they support.
+- Prefer reusable Omniform packages over hard-coded domain behaviour, and do not add infrastructure without a demonstrated need.
 - Make the smallest coherent change; update schemas, fixtures, examples, and tests when semantics change.
 - Run `npm test && npm run docs:check` and report the evidence. Do not duplicate responsibilities owned by OmniSeed or OmniSeed OS.
