@@ -18,4 +18,6 @@ The published JSON Schema is the sole structural authority. Custom validation ha
 
 See [`docs/architecture.md`](docs/architecture.md) for the constitutional boundaries.
 
+The canonical deployment example is [`examples/omniseed-company/company.omniform.yaml`](examples/omniseed-company/company.omniform.yaml). See [`docs/deploying-a-company.md`](docs/deploying-a-company.md).
+
 Licensing remains intentionally unresolved pending an explicit project decision; the Generation 1 package declares no license metadata.

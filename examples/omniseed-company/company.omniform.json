@@ -1,0 +1,42 @@
+{
+  "apiVersion": "omniform.org/v1alpha1",
+  "kind": "Company",
+  "metadata": { "id": "omniseed", "name": "OmniSeed", "labels": { "generation": "1" } },
+  "spec": {
+    "intent": "Build and operate the open Company-as-Code system.",
+    "outcomes": [{ "id": "company_as_code", "description": "A company can be defined, provisioned, observed, and operated from intent." }],
+    "providers": {
+      "systems": { "provider": "vercel" },
+      "schedules": { "provider": "vercel" },
+      "observations": { "provider": "vercel" },
+      "connectors": { "provider": "local_connectors" },
+      "agents": { "provider": "local_agents" },
+      "workflows": { "provider": "local_workflows" },
+      "company_search": { "provider": "local_company_search" }
+    },
+    "capabilities": [
+      { "id": "company_operating_environment", "name": "Company Operating Environment", "requires": [
+        { "id": "web_application_hosting", "primitiveFamily": "systems" },
+        { "id": "production_deployment", "primitiveFamily": "systems" },
+        { "id": "public_endpoint", "primitiveFamily": "systems" },
+        { "id": "deployment_observation", "primitiveFamily": "observations" }
+      ] },
+      { "id": "open_source_development", "name": "Open Source Development", "requires": [
+        { "id": "inspect_repository", "primitiveFamily": "connectors" },
+        { "id": "coordinate_development", "primitiveFamily": "workflows" }
+      ] },
+      { "id": "company_search", "name": "Company Search", "requires": [{ "id": "search_company_content", "primitiveFamily": "company_search" }] },
+      { "id": "company_stewardship", "name": "Company Stewardship", "requires": [
+        { "id": "inspect_company_state", "primitiveFamily": "agents" },
+        { "id": "explain_company_state", "primitiveFamily": "agents" }
+      ] }
+    ],
+    "operations": [
+      { "id": "get_capability", "capability": "company_stewardship", "description": "Get current capability truth.", "input": { "type": "object", "required": ["capabilityId"] }, "output": { "type": "object" }, "mutation": false, "permissions": ["capability.read"], "approval": "none", "interfaces": ["lily", "ui", "api", "cli", "agent", "machine"] },
+      { "id": "get_company_identity", "capability": "company_stewardship", "description": "Get the identity and runtime version of this company instance.", "input": { "type": "object" }, "output": { "type": "object" }, "mutation": false, "permissions": ["company.read"], "approval": "none", "interfaces": ["lily", "ui", "api", "cli", "agent", "machine"] },
+      { "id": "generate_plan", "capability": "company_stewardship", "description": "Generate and persist a deterministic plan.", "input": { "type": "object" }, "output": { "type": "object" }, "mutation": false, "permissions": ["plan.create"], "approval": "none", "interfaces": ["lily", "ui", "api", "cli", "agent"] },
+      { "id": "apply_plan", "capability": "company_stewardship", "description": "Apply approved actions from the exact reviewed plan.", "input": { "type": "object", "required": ["plan", "approval"] }, "output": { "type": "object" }, "mutation": true, "permissions": ["plan.apply"], "approval": "required", "interfaces": ["ui", "api", "cli", "agent"] },
+      { "id": "search_company", "capability": "company_search", "description": "Search governed OmniSeed company knowledge.", "input": { "type": "object", "required": ["query"] }, "output": { "type": "array" }, "mutation": false, "permissions": ["company_search.read"], "approval": "none", "interfaces": ["lily", "ui", "api", "cli", "agent", "machine"], "providerDependencies": ["company_search"] }
+    ]
+  }
+}
