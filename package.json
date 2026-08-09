@@ -1,0 +1,19 @@
+{
+  "name": "@omniseed/omniform",
+  "version": "1.0.0-alpha.1",
+  "description": "The open Company-as-Code language and organisational commons.",
+  "type": "module",
+  "exports": {
+    ".": "./src/index.js",
+    "./schema": "./schema/omniform.schema.json"
+  },
+  "scripts": {
+    "test": "node --test",
+    "validate": "node ./src/cli.js validate",
+    "check": "npm test"
+  },
+  "bin": { "omniform": "./src/cli.js" },
+  "dependencies": { "ajv": "^8.17.1", "yaml": "^2.8.1" },
+  "engines": { "node": ">=22" },
+  "files": ["src", "schema", "README.md", "docs"]
+}
