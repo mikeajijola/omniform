@@ -1,0 +1,27 @@
+apiVersion: omniform.org/v1alpha1
+kind: Company
+metadata:
+  id: acme
+  name: Acme
+spec:
+  intent: Operate a searchable customer support capability.
+  providers:
+    company_search:
+      provider: local_company_search
+  capabilities:
+    - id: company_knowledge
+      name: Company Knowledge
+      requires:
+        - id: search_company_content
+          primitiveFamily: company_search
+  operations:
+    - id: search_company
+      capability: company_knowledge
+      description: Search governed company knowledge.
+      input: { type: object, required: [query] }
+      output: { type: array }
+      mutation: false
+      permissions: [company_search.read]
+      approval: none
+      interfaces: [lily, ui, api, cli, agent, machine]
+      providerDependencies: [company_search]

@@ -1,6 +1,6 @@
 {
   "name": "@omniseed/omniform",
-  "version": "1.0.0-alpha.1",
+  "version": "1.0.0-alpha.2",
   "description": "The open Company-as-Code language and organisational commons.",
   "type": "module",
   "exports": {

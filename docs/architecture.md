@@ -12,6 +12,9 @@ Omniform defines exactly one company. Its source is Git-friendly YAML, while its
 - Stable IDs carry authority and audit identity; display names do not.
 - JSON Schema is canonical for structure; code validates only cross-object semantics.
 - Operations declare interface contracts but never claim a handler is implemented.
+- Serialization is format-neutral: YAML and JSON normalize to one canonical object.
+- Company Search is replaceable retrieval infrastructure, never canonical company truth.
+- Provider truthfulness and company isolation apply to Company Search.
 
 The initial schema is deliberately small. Extensions belong under resource `spec` until repeated use proves that they deserve portable semantics.
 
