@@ -28,7 +28,9 @@ If it is only about screens or Lily, it belongs in [OmniSeed OS](https://github.
 
 It is fine for Omniform to say:
 
-> This company needs a public website and prefers Vercel for hosting.
+> This company needs the ability to run a public website. For this company, Vercel is one chosen way to make that real.
+
+The website need is the Capability. Vercel is only one possible realisation.
 
 It is not fine for Omniform to say:
 
