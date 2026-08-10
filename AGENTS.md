@@ -12,7 +12,7 @@ Read these rules before you learn the code.
 - Do not put vendor behaviour into the core language.
 - Do not say something exists just because it was declared.
 - YAML and JSON must mean the same thing.
-- Keep IDs stable. Names can change. IDs carry history.
+- Do not casually change IDs. Names can change, but IDs let us know that something is still the same thing.
 - Search helps find company knowledge. Search is not the source of truth.
 - If a change only belongs to OmniSeed or OmniSeed OS, do not put it here.
 
@@ -36,31 +36,22 @@ It is not fine for Omniform to say:
 
 Only OmniSeed can check and record that second statement.
 
-## For maintainers
+## How the code protects this
 
 - Keep `schema/omniform.schema.json` as the one authority for file structure.
 - Put cross-item meaning and reference checks in `src/validate.js`. Do not copy schema rules into code.
-- Keep YAML and JSON format-neutral. They must load into the same JSON-compatible value.
-- Treat Capability, resource, operation, and Provider IDs as stable audit identities.
-- Keep the core schema Provider-neutral. Vendor settings may live inside Provider configuration or resource `spec`.
-- Do not add Provider SDKs, credentials, network calls, runtime state, observations, plans, approvals, UI code, or model execution.
+- Make YAML and JSON load as the same company.
+- Keep vendor settings outside the shared language unless they sit inside a clearly Provider-specific area.
+- Do not add Provider connections, secrets, live state, plans, approvals, or UI code here.
 - A declared operation is a promise about an interface. It does not prove that working code exists.
-- Company Search must keep company boundaries and result sources. It must remain replaceable.
+- Company Search must stay inside one company and keep the source of each result. Its Provider must remain replaceable.
+- Never make Omniform depend on OmniSeed or OmniSeed OS.
 
-The dependency direction is:
-
-```text
-omniform → omniseed → omniseedos
-```
-
-Never import either later project into Omniform. Production projects use versioned packages. Sibling folders are only a local development convenience.
-
-When the schema, loaded object, meaning, or public exports change:
+When the language or meaning changes:
 
 1. Add valid and invalid tests here.
 2. Decide whether old company files still work.
-3. Check OmniSeed's reading, planning, operation, and hash tests.
-4. Check OmniSeed OS examples and package tests.
-5. Write down any migration. Never quietly change the meaning of an old field.
+3. Check the affected OmniSeed and OmniSeed OS behavior.
+4. Write down any needed migration. Never quietly change an old field's meaning.
 
-Run `npm test` after every contract change. Keep the examples valid. Update [`docs/architecture.md`](docs/architecture.md) when a deep technical rule changes.
+Run `npm test` after every language change. Keep the examples valid. The exact file, package, and validation rules live in [`docs/architecture.md`](docs/architecture.md).

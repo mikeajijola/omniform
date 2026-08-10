@@ -4,7 +4,7 @@ Omniform is a way to describe one company.
 
 ## The idea
 
-A company should be something we can describe clearly.
+A company should be something we can describe clearly. We should be able to write down what it is meant to be.
 
 Omniform is the language for doing that.
 
@@ -12,7 +12,7 @@ It says what a company needs to be able to do. It may also say which Providers t
 
 A **Capability** is something the company needs to be able to do. Customer Support is a Capability. Sending an invoice could be another one.
 
-A **Provider** is a possible way to make part of the company real. A company may choose one Provider for email and another for hosting.
+A **Provider** is a possible way to make part of the company real. A company can choose different Providers for different kinds of work.
 
 Omniform does not run the company. It does not claim that something exists just because someone wrote it down.
 
@@ -23,6 +23,8 @@ People can write Omniform in YAML. Software can also use JSON. Both formats mean
 ## How it fits
 
 Company as Code means a company can be described, created, checked, and changed through code.
+
+A company should be able to run from that description. Its work may be done by people, software, AI agents, services, or machines. Where it is safe and useful, that work can be automated.
 
 ```text
 Company as Code
@@ -57,7 +59,7 @@ But the Omniform file does not send a reply. It does not prove that an inbox exi
 
 ## What this project owns
 
-Omniform owns the shared language for describing a company.
+Omniform owns the shared language for describing one company.
 
 It owns:
 
@@ -89,11 +91,9 @@ Start with [`examples/company.omniform.yaml`](examples/company.omniform.yaml). U
 
 ## For developers
 
-The JSON Schema in [`schema/omniform.schema.json`](schema/omniform.schema.json) defines the file structure. Code adds checks for links between items.
+Read [`docs/architecture.md`](docs/architecture.md) for the exact Provider model, file rules, IDs, validation, resources, operations, and package boundary.
 
-Read [`docs/architecture.md`](docs/architecture.md) for technical rules about IDs, validation, resources, operations, Provider choice, and the line between requested and real state.
-
-OmniSeed uses the versioned `@omniseed/omniform` package. A change to the schema or meaning of a field can affect [OmniSeed](https://github.com/mikeajijola/omniseed) and [OmniSeed OS](https://github.com/mikeajijola/omniseedos). Test all three before releasing a contract change.
+A change to the Omniform language can affect [OmniSeed](https://github.com/mikeajijola/omniseed) and [OmniSeed OS](https://github.com/mikeajijola/omniseedos). Check all three projects before releasing that kind of change.
 
 ## Project status
 
