@@ -1,39 +1,66 @@
-# Working in Omniform
+# Working on Omniform
 
-Omniform is the source-language and validation repository for the OmniSeed ecosystem. Changes here define portable desired-state contracts; they must not implement runtime behaviour.
+When you work on Omniform, protect the meaning of the company.
 
-## Repository responsibilities
+Read these rules before you learn the code.
 
-- Keep `schema/omniform.schema.json` the sole structural authority.
-- Keep YAML and JSON serialization-neutral: both must normalize into the same canonical object.
-- Put only cross-object, semantic, or referential checks in `src/validate.js`; do not duplicate structural schema rules in code.
-- Treat capability IDs, resource IDs, operation IDs, and provider IDs as stable authority/audit identifiers. Display names are not identity.
-- Keep the schema provider-neutral. Vendor-specific configuration may live under declared provider configuration or resource `spec`, not in core portable semantics without repeated evidence.
-- Do not add provider SDKs, credentials, network calls, deployment state, observations, plans, approvals, UI code, or model execution.
+## What must stay true
 
-## Ecosystem contract
+- Omniform describes a company. It does not run one.
+- Capabilities say what the company must be able to do.
+- Providers are choices for how things may be made real.
+- Do not put vendor behaviour into the core language.
+- Do not say something exists just because it was declared.
+- YAML and JSON must mean the same thing.
+- Keep IDs stable. Names can change. IDs carry history.
+- Search helps find company knowledge. Search is not the source of truth.
+- If a change only belongs to OmniSeed or OmniSeed OS, do not put it here.
 
-- [OmniSeed](https://github.com/mikeajijola/omniseed) depends on `@omniseed/omniform` and owns compilation, resolution, providers, state, planning, approval, apply, and reconciliation.
-- [OmniSeed OS](https://github.com/mikeajijola/omniseedos) depends on both packages and owns per-company UI/API/Lily projection. It must not drive schema design with presentation-only fields.
-- Dependency direction is `omniform → omniseed → omniseedos`; never import either downstream repository here.
-- Sibling checkouts are a development convenience only. Cross-repository contracts must work through versioned package exports and artifacts.
+Use simple words in public docs. Explain a core product word the first time you use it.
 
-When changing schema, constants, normalized object shape, or exports:
+Ask one question when adding a field: “Does this describe the company, or does it describe something that happened while running the company?”
 
-1. Add positive and negative fixtures/tests in this repository.
-2. Decide whether the change is backward compatible and update the package version accordingly.
-3. Check OmniSeed's compiler, resolver, planner hashes, operation registry, and tests against the new contract.
-4. Check OmniSeed OS declarations/fixtures and distribution test against matching package versions.
-5. Document migration expectations; never silently reinterpret an existing field.
+If it describes what happened, it belongs in [OmniSeed](https://github.com/mikeajijola/omniseed), not Omniform.
 
-## Invariants
+If it is only about screens or Lily, it belongs in [OmniSeed OS](https://github.com/mikeajijola/omniseedos).
 
-- Capabilities express intent; resources and providers express a desired realisation, not actual deployment.
-- Desired, deployed, observed, and indexed state never collapse into one record.
-- Declaring a provider does not assert an installed implementation or health.
-- Declaring an operation does not assert that a handler is registered or available.
-- Company Search is a first-class replaceable primitive for governed discovery and retrieval, not canonical truth.
-- Every Company Search request is scoped by company/namespace; provenance remains attached to results.
-- Lily and all other actors reach search through executable OmniSeed operations, never a vendor API declared here.
+## A simple example
 
-Run `npm test` after every contract change. Keep examples valid under the published schema and update `docs/architecture.md` when an architectural boundary changes.
+It is fine for Omniform to say:
+
+> This company needs a public website and prefers Vercel for hosting.
+
+It is not fine for Omniform to say:
+
+> The website was deployed and is healthy.
+
+Only OmniSeed can check and record that second statement.
+
+## For maintainers
+
+- Keep `schema/omniform.schema.json` as the one authority for file structure.
+- Put cross-item meaning and reference checks in `src/validate.js`. Do not copy schema rules into code.
+- Keep YAML and JSON format-neutral. They must load into the same JSON-compatible value.
+- Treat Capability, resource, operation, and Provider IDs as stable audit identities.
+- Keep the core schema Provider-neutral. Vendor settings may live inside Provider configuration or resource `spec`.
+- Do not add Provider SDKs, credentials, network calls, runtime state, observations, plans, approvals, UI code, or model execution.
+- A declared operation is a promise about an interface. It does not prove that working code exists.
+- Company Search must keep company boundaries and result sources. It must remain replaceable.
+
+The dependency direction is:
+
+```text
+omniform → omniseed → omniseedos
+```
+
+Never import either later project into Omniform. Production projects use versioned packages. Sibling folders are only a local development convenience.
+
+When the schema, loaded object, meaning, or public exports change:
+
+1. Add valid and invalid tests here.
+2. Decide whether old company files still work.
+3. Check OmniSeed's reading, planning, operation, and hash tests.
+4. Check OmniSeed OS examples and package tests.
+5. Write down any migration. Never quietly change the meaning of an old field.
+
+Run `npm test` after every contract change. Keep the examples valid. Update [`docs/architecture.md`](docs/architecture.md) when a deep technical rule changes.
