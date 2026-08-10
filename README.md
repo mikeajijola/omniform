@@ -1,40 +1,85 @@
 # Omniform
 
-Omniform is the declarative language at the bottom of the OmniSeed ecosystem. It describes **what one company is intended to be**—its capabilities, required primitive families, desired providers, resources, operations, outcomes, and autonomy constraints. It does not deploy anything and never claims that a provider or resource exists, is connected, or is healthy.
+Omniform is a way to describe one company.
 
-The repository owns the portable Company-as-Code contract:
+## The idea
 
-- `schema/omniform.schema.json` is the structural authority for a company declaration.
-- `src/io.js` loads YAML or JSON into the same canonical JavaScript object.
-- `src/validate.js` adds semantic and referential checks that JSON Schema cannot express.
-- `src/constants.js` exposes the shared vocabulary.
-- `src/cli.js` provides declaration validation.
+A company should be something we can describe clearly. We should be able to write down what it is meant to be.
 
-Capabilities are the stable unit of intent. A capability lists requirements by primitive family; resources may constrain how it should be realised; the provider map selects the desired provider for each family. Operations describe governed interfaces—including permissions, approval mode, mutation status, and allowed clients—but declaration does not make an operation executable.
+Omniform is the language for doing that.
 
-## Place in the ecosystem
+It says what a company needs to be able to do. It may also say which Providers the company wants to use.
 
-The repositories form a one-way dependency chain:
+A **Capability** is something the company needs to be able to do. Customer Support is a Capability. Sending an invoice could be another one.
+
+A **Provider** is a possible way to make part of the company real. A company can choose different Providers for different kinds of work.
+
+Omniform does not run the company. It does not claim that something exists just because someone wrote it down.
+
+Omniform also stays neutral about Providers. Its core language does not belong to one vendor.
+
+People can write Omniform in YAML. Software can also use JSON. Both formats mean the same thing.
+
+## How it fits
+
+Company as Code means a company can be described, created, checked, and changed through code.
+
+A company should be able to run from that description. Its work may be done by people, software, AI agents, services, or machines. Where it is safe and useful, that work can be automated.
 
 ```text
-Omniform declaration
-        │ parsed and validated by @omniseed/omniform
-        ▼
-OmniSeed engine
-        │ compiles runtime truth and controls plan/approve/apply
-        ▼
-OmniSeed OS
-          presents one company's registry through UI, API, and Lily
+Company as Code
+      ↓
+Omniform describes the company
+      ↓
+OmniSeed makes the company real
+      ↓
+OmniSeed OS is where the company is seen and operated
 ```
 
-- [OmniSeed](https://github.com/mikeajijola/omniseed) consumes the versioned `@omniseed/omniform` package. It resolves capabilities against registered providers and runtime state; that deployed/observed state must never be written back into an Omniform declaration.
-- [OmniSeed OS](https://github.com/mikeajijola/omniseedos) normally consumes Omniform indirectly through OmniSeed, and directly only to load/validate the configured company declaration. UI- or deployment-specific fields do not belong in this schema.
+[OmniSeed](https://github.com/mikeajijola/omniseed) reads Omniform and works out what needs to happen.
 
-A schema or semantic change here is therefore a contract change for both downstream repositories. Coordinate versions, update engine compiler/resolver tests, and update OS fixtures before release. Production consumers use versioned packages; sibling directories such as `../omniseed` and `../omniseedos` are only a convenient local checkout layout.
+[OmniSeed OS](https://github.com/mikeajijola/omniseedos) shows the company. Lily is the company's steward inside OmniSeed OS.
 
-## Quick start
+These are three parts of one system.
 
-Requires Node.js 22 or newer.
+## A small example
+
+Imagine a company needs Customer Support.
+
+That Capability may need to:
+
+- receive a customer message
+- understand the problem
+- look up customer information
+- send a reply
+
+Omniform can describe those needs. It can also name the Providers the company would like to use.
+
+But the Omniform file does not send a reply. It does not prove that an inbox exists. OmniSeed must check what is real and do the work.
+
+## What this project owns
+
+Omniform owns the shared language for describing one company.
+
+It owns:
+
+- the shape of a company file
+- the meaning of Capabilities, Providers, resources, and operations
+- YAML and JSON loading
+- checks that catch invalid company files
+
+It does not own:
+
+- live company state
+- Provider connections or secrets
+- plans, approvals, or changes to outside systems
+- the user interface or Lily
+
+Search can help people find company knowledge. Search is not the source of truth. The original company records still matter.
+
+## Try it
+
+You need Node.js 22 or newer.
 
 ```sh
 npm install
@@ -42,20 +87,16 @@ npm test
 npx omniform validate examples/company.omniform.yaml
 ```
 
-YAML is recommended for human-authored declarations and JSON for generated declarations or APIs. Files may use `*.omniform.yaml`, `*.omniform.yml`, or `*.omniform.json`; both formats normalize to the same JSON-compatible object.
+Start with [`examples/company.omniform.yaml`](examples/company.omniform.yaml). Use YAML for a file that people will write. Use JSON when software creates the file.
 
-```js
-import { loadOmniform, parseOmniform, validateOmniform } from "@omniseed/omniform";
+## For developers
 
-const company = await loadOmniform("company.omniform.yaml");
-```
+Read [`docs/architecture.md`](docs/architecture.md) for the exact Provider model, file rules, IDs, validation, resources, operations, and package boundary.
 
-See [`examples/company.omniform.yaml`](examples/company.omniform.yaml) for a minimal company and [`docs/architecture.md`](docs/architecture.md) for constitutional boundaries.
+A change to the Omniform language can affect [OmniSeed](https://github.com/mikeajijola/omniseed) and [OmniSeed OS](https://github.com/mikeajijola/omniseedos). Check all three projects before releasing that kind of change.
 
-## Truth and ownership boundaries
+## Project status
 
-Omniform owns desired, portable semantics. OmniSeed owns plans, approvals, provider status, deployed and observed resources, evidence, history, and state versions. OmniSeed OS owns presentation and request transport. Provider SDK calls, credentials, UI concerns, runtime health, and reconciliation logic must not enter this package.
+Omniform is in Generation 1 and early development.
 
-`company_search` illustrates the boundary: Omniform can require search and select a desired provider, but it does not contain an index or claim that the provider is installed. Search may index canonical information for governed retrieval; it never becomes canonical company truth.
-
-Licensing remains intentionally unresolved pending an explicit project decision; the Generation 1 package declares no license metadata.
+Licensing has not been decided. The package does not declare a license yet.
