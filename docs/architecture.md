@@ -29,3 +29,5 @@ Capabilities may be high-level declarations with no resources. Advanced declarat
 - `src/cli.js` exposes declaration validation.
 
 The versioned `@omniseed/omniform` package is the contract consumed by OmniSeed. Schema, normalized object-shape, meaning, or export changes require coordinated engine and OmniSeed OS checks. Sibling source checkouts are a development convenience, not a production dependency model.
+
+Governed company changes operate on this validated, canonical JSON-compatible object rather than YAML text. OmniSeed owns proposal hashing, authority, approval, persistence, and stale-definition checks; Omniform continues to own validation of the complete candidate definition. Runtime proposal fields never enter the language schema.
