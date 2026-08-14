@@ -16,6 +16,8 @@ A **Provider** is a possible way to make part of the company real. A company can
 
 Omniform does not run the company. It does not claim that something exists just because someone wrote it down.
 
+When an authorised actor proposes changing the company, OmniSeed applies a deterministic change to the parsed Omniform object, validates the complete resulting company here, and governs whether that candidate becomes canonical. Omniform does not store proposals, approvals, or runtime history.
+
 Omniform also stays neutral about Providers. Its core language does not belong to one vendor.
 
 People can write Omniform in YAML. Software can also use JSON. Both formats mean the same thing.
