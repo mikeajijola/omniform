@@ -1,5 +1,7 @@
 # Omniform
 
+Omniform describes one durable company: its implementation-independent Capabilities, named Realisations, canonical primitive participants, independently selected family Providers, governance, and PR-governed Git desired-state authority. It does not run the company or contain observed state.
+
 Omniform is a way to describe one company.
 
 ## The idea

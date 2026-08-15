@@ -35,6 +35,25 @@ test("capabilities compose families and Provider selection remains independent",
   assert.notEqual(valid.spec.providers.workflows.provider, valid.spec.providers.identity.provider);
   assert.equal(valid.spec.resources.agents[0].spec.kind, "person");
 });
+test("named realisations trace capability requirements through primitive resources", () => {
+  const capability = valid.spec.capabilities[0];
+  const realisation = valid.spec.realisations.find(item => item.id === capability.realisations[0]);
+  assert.equal(realisation.capability, capability.id);
+  assert.deepEqual(new Set(realisation.participants.flatMap(item => item.supplies)), new Set(capability.requires.map(item => item.id)));
+  assert.equal(validateSemantics(valid).valid, true);
+});
+test("realisations cannot bypass resources or claim requirements a resource does not offer", () => {
+  const unknown = structuredCloneWith(valid, value => { value.spec.realisations[0].participants[0].resource = "missing_actor"; });
+  const falseClaim = structuredCloneWith(valid, value => { value.spec.realisations[0].participants[0].supplies = ["repository_access"]; });
+  assert.match(validateSemantics(unknown).issues[0].message, /unknown resource/);
+  assert.match(validateSemantics(falseClaim).issues[0].message, /does not offer/);
+});
+test("canonical desired state is Git-backed and PR-governed", () => {
+  assert.equal(valid.spec.governance.desiredState.branch, "main");
+  assert.equal(valid.spec.governance.desiredState.changeMode, "pull_request");
+  const hidden = structuredCloneWith(valid, value => { value.spec.governance.desiredState.changeMode = "runtime_store"; });
+  assert.equal(validateStructure(hidden).valid, false);
+});
 test("desired observation mechanisms cannot contain runtime observation records", () => {
   const mechanism = structuredCloneWith(valid, value => { value.spec.resources.observations[0].spec = { measures: ["check_state"] }; });
   assert.equal(validateStructure(mechanism).valid, true);

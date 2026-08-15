@@ -8,6 +8,12 @@ spec:
   outcomes:
     - id: autonomous_company_platform
       description: Companies can be founded and operated from intent.
+  governance:
+    desiredState:
+      repository: https://github.com/mikeajijola/omniseed-company.git
+      branch: main
+      path: omniform.yaml
+      changeMode: pull_request
   providers:
     agents: { provider: people_operations }
     skills: { provider: engineering_toolchain }
@@ -30,8 +36,20 @@ spec:
         - { id: change_health_monitoring, primitiveFamily: observations }
         - { id: engineering_context, primitiveFamily: memory }
         - { id: recognised_contributors, primitiveFamily: identity }
-      realisation:
-        resources: [software_engineer, engineering_skills, repository_connector, change_workflow, review_policy, change_observer, engineering_history, contributor_identity]
+      realisations: [development_reference]
+  realisations:
+    - id: development_reference
+      name: Development, review and release
+      capability: manage_software_development
+      participants:
+        - { resource: software_engineer, role: contributor, supplies: [engineering_agency] }
+        - { resource: engineering_skills, supplies: [edit_review_test_code] }
+        - { resource: repository_connector, supplies: [repository_access] }
+        - { resource: change_workflow, supplies: [governed_change_process] }
+        - { resource: review_policy, supplies: [required_review] }
+        - { resource: change_observer, supplies: [change_health_monitoring] }
+        - { resource: engineering_history, supplies: [engineering_context] }
+        - { resource: contributor_identity, supplies: [recognised_contributors] }
   resources:
     agents:
       - id: software_engineer
