@@ -6,6 +6,7 @@ import { parseOmniform, primitiveFamilies, validateSemantics, validateStructure 
 
 const validSource = await readFile(new URL("../examples/omniseed/omniform.yaml", import.meta.url), "utf8");
 const valid = parse(validSource);
+const companySearch = parse(await readFile(new URL("../examples/company.omniform.yaml", import.meta.url), "utf8"));
 
 test("valid Omniform passes canonical JSON Schema", () => assert.equal(validateStructure(valid).valid, true));
 test("reference company passes semantic validation", () => assert.equal(validateSemantics(valid).valid, true));
@@ -39,6 +40,21 @@ test("desired observation mechanisms cannot contain runtime observation records"
   assert.equal(validateStructure(mechanism).valid, true);
   const runtimeRecord = structuredCloneWith(mechanism, value => { value.spec.resources.observations[0].observedAt = "2026-08-15T00:00:00.000Z"; });
   assert.equal(validateStructure(runtimeRecord).valid, false);
+});
+test("company_search is a normal multi-primitive Capability, never a family alias", () => {
+  assert.equal(validateStructure(companySearch).valid, true);
+  assert.equal(validateSemantics(companySearch).valid, true);
+  const capability = companySearch.spec.capabilities.find(item => item.id === "company_search");
+  assert.deepEqual(capability.requires.map(item => item.primitiveFamily), ["skills", "memory", "connectors"]);
+  assert.equal(companySearch.spec.operations.find(item => item.id === "search_company").capability, "company_search");
+  assert.equal(primitiveFamilies.includes("company_search"), false);
+});
+test("company_search strategies can omit memory or connectors without changing Capability identity", () => {
+  const memoryBacked = structuredCloneWith(companySearch, value => { value.spec.capabilities[0].requires = value.spec.capabilities[0].requires.filter(item => item.primitiveFamily !== "connectors"); value.spec.operations[0].providerDependencies = ["skills", "memory"]; });
+  const connectorBacked = structuredCloneWith(companySearch, value => { value.spec.capabilities[0].requires = value.spec.capabilities[0].requires.filter(item => item.primitiveFamily !== "memory"); value.spec.operations[0].providerDependencies = ["skills", "connectors"]; });
+  assert.equal(validateSemantics(memoryBacked).valid, true);
+  assert.equal(validateSemantics(connectorBacked).valid, true);
+  assert.equal(memoryBacked.spec.capabilities[0].id, connectorBacked.spec.capabilities[0].id);
 });
 
 function structuredCloneWith(value, mutate) { const clone = structuredClone(value); mutate(clone); return clone; }

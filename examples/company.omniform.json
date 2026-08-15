@@ -3,16 +3,17 @@
   "kind": "Company",
   "metadata": { "id": "acme", "name": "Acme" },
   "spec": {
-    "intent": "Retain and retrieve governed company knowledge.",
-    "providers": { "memory": { "provider": "local_company_search" } },
+    "intent": "Find and retrieve relevant company knowledge.",
+    "providers": { "skills": { "provider": "local_search_skills" }, "memory": { "provider": "local_memory" }, "connectors": { "provider": "local_information_sources" } },
     "capabilities": [{
-      "id": "company_knowledge",
-      "name": "Company Knowledge",
-      "requires": [{ "id": "retain_company_knowledge", "primitiveFamily": "memory" }]
+      "id": "company_search",
+      "name": "Company Search",
+      "description": "Find and retrieve relevant company knowledge.",
+      "requires": [{ "id": "semantic_search", "primitiveFamily": "skills" }, { "id": "retained_company_knowledge", "primitiveFamily": "memory" }, { "id": "access_company_sources", "primitiveFamily": "connectors" }]
     }],
     "operations": [{
       "id": "search_company",
-      "capability": "company_knowledge",
+      "capability": "company_search",
       "description": "Search governed company knowledge.",
       "input": { "type": "object", "required": ["query"] },
       "output": { "type": "array" },
@@ -20,7 +21,7 @@
       "permissions": ["company_search.read"],
       "approval": "none",
       "interfaces": ["lily", "ui", "api", "cli", "agent", "machine"],
-      "providerDependencies": ["memory"]
+      "providerDependencies": ["skills", "memory", "connectors"]
     }]
   }
 }

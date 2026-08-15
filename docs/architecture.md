@@ -50,4 +50,6 @@ The canonical primitive families are:
 
 A Provider realises primitive-family requirements. High-level Capabilities compose those requirements and never bind directly to vendors. A package may support several families, but selection remains independent for every family.
 
-Persistent realised resources belong to deployed and observed state; persistence alone does not create a primitive family. The removed `systems` family has no universal replacement. The removed `company_search` family must be migrated manually into ordinary Capability/operation composition—commonly using `memory`, `connectors`, `skills`, and agents—without silently mapping search to memory alone.
+Persistent realised resources belong to deployed and observed state; persistence alone does not create a primitive family. The removed `systems` family has no universal replacement.
+
+Company Search is an example of a Company Capability, not a primitive family. The `company_search` Capability means that the company can find and retrieve relevant company knowledge. A declared strategy may compose `skills` and `memory`, `skills` and `connectors`, or agents with skills, connectors, memory, policies, identity, and observations. No one primitive is synonymous with the Capability: `company_search` is not `memory` and is not `skills`. The ordinary `search_company` operation exposes authorized invocation through that Capability. Search results remain retrieval output rather than canonical company truth.
