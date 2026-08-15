@@ -4,16 +4,16 @@ metadata:
   id: acme
   name: Acme
 spec:
-  intent: Operate a searchable customer support capability.
+  intent: Retain and retrieve governed company knowledge.
   providers:
-    company_search:
+    memory:
       provider: local_company_search
   capabilities:
     - id: company_knowledge
       name: Company Knowledge
       requires:
-        - id: search_company_content
-          primitiveFamily: company_search
+        - id: retain_company_knowledge
+          primitiveFamily: memory
   operations:
     - id: search_company
       capability: company_knowledge
@@ -24,4 +24,4 @@ spec:
       permissions: [company_search.read]
       approval: none
       interfaces: [lily, ui, api, cli, agent, machine]
-      providerDependencies: [company_search]
+      providerDependencies: [memory]

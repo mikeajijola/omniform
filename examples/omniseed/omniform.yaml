@@ -4,50 +4,78 @@ metadata:
   id: omniseed
   name: OmniSeed
 spec:
-  intent: Build and operate the open Company-as-Code ecosystem.
+  intent: Manage software development without binding the capability to one vendor.
   outcomes:
     - id: autonomous_company_platform
       description: Companies can be founded and operated from intent.
   providers:
-    agents: { provider: reference_agents }
-    skills: { provider: omniseed }
-    connectors: { provider: reference_connectors }
-    workflows: { provider: omniseed }
-    schedules: { provider: reference_scheduler }
-    policies: { provider: omniseed }
-    observations: { provider: omniseed }
-    systems: { provider: local }
-    memory: { provider: local_memory }
+    agents: { provider: people_operations }
+    skills: { provider: engineering_toolchain }
+    connectors: { provider: github_connector }
+    workflows: { provider: change_management }
+    policies: { provider: governance_engine }
+    observations: { provider: software_monitoring }
+    memory: { provider: engineering_knowledge }
+    identity: { provider: entra_identity }
   capabilities:
-    - id: company_operating_environment
-      name: Company Operating Environment
+    - id: manage_software_development
+      name: Manage Software Development
       autonomy: { mode: apply_low_risk }
       requires:
-        - { id: web_application_hosting, primitiveFamily: systems }
-        - { id: production_deployment, primitiveFamily: systems }
-        - { id: public_endpoint, primitiveFamily: systems }
-        - { id: deployment_observation, primitiveFamily: observations }
+        - { id: engineering_agency, primitiveFamily: agents }
+        - { id: edit_review_test_code, primitiveFamily: skills }
+        - { id: repository_access, primitiveFamily: connectors }
+        - { id: governed_change_process, primitiveFamily: workflows }
+        - { id: required_review, primitiveFamily: policies }
+        - { id: change_health_monitoring, primitiveFamily: observations }
+        - { id: engineering_context, primitiveFamily: memory }
+        - { id: recognised_contributors, primitiveFamily: identity }
       realisation:
-        resources: [omniseed_os, deployment_observation]
+        resources: [software_engineer, engineering_skills, repository_connector, change_workflow, review_policy, change_observer, engineering_history, contributor_identity]
   resources:
-    systems:
-      - id: omniseed_os
-        name: OmniSeed OS
-        offers: [web_application_hosting, production_deployment, public_endpoint]
-        spec: { runtime: local }
-    observations:
-      - id: deployment_observation
-        name: Deployment Observation
-        offers: [deployment_observation]
-        spec: { type: external_state }
     agents:
-      - id: company_steward
-        name: Lily
-        offers: [inspect_company_state, generate_plan]
-        spec: { operationalIdentity: company_steward }
+      - id: software_engineer
+        name: Software Engineer
+        offers: [engineering_agency]
+        spec: { kind: person }
+    skills:
+      - id: engineering_skills
+        name: Engineering Skills
+        offers: [edit_review_test_code]
+        spec: { abilities: [edit_code, review_change, run_test, open_pull_request] }
+    connectors:
+      - id: repository_connector
+        name: Repository Connector
+        offers: [repository_access]
+        spec: { boundary: source_control }
+    workflows:
+      - id: change_workflow
+        name: Change Review Workflow
+        offers: [governed_change_process]
+        spec: { stages: [change, review, test, release] }
+    policies:
+      - id: review_policy
+        name: Required Review Policy
+        offers: [required_review]
+        spec: { minimumReviews: 1 }
+    observations:
+      - id: change_observer
+        name: Change Health Observer
+        offers: [change_health_monitoring]
+        spec: { measures: [tests, checks, pull_request_state] }
+    memory:
+      - id: engineering_history
+        name: Engineering History
+        offers: [engineering_context]
+        spec: { content: [source_history, change_history] }
+    identity:
+      - id: contributor_identity
+        name: Contributor Identity
+        offers: [recognised_contributors]
+        spec: { principals: [people, services] }
   operations:
     - id: get_capability
-      capability: company_operating_environment
+      capability: manage_software_development
       description: Get current capability truth.
       input: { type: object, required: [capabilityId] }
       output: { type: object }
@@ -56,7 +84,7 @@ spec:
       approval: none
       interfaces: [lily, ui, api, cli, agent, machine]
     - id: generate_plan
-      capability: company_operating_environment
+      capability: manage_software_development
       description: Generate and persist a deterministic plan.
       input: { type: object }
       output: { type: object }
@@ -65,7 +93,7 @@ spec:
       approval: none
       interfaces: [lily, ui, api, cli, agent]
     - id: apply_plan
-      capability: company_operating_environment
+      capability: manage_software_development
       description: Apply approved actions from the exact reviewed plan.
       input: { type: object, required: [plan, approval] }
       output: { type: object }
