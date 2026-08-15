@@ -2,6 +2,8 @@
   "name": "@omniseed/omniform",
   "version": "1.0.0-alpha.4",
   "description": "The open Company-as-Code language and organisational commons.",
+  "repository": { "type": "git", "url": "https://github.com/mikeajijola/omniform.git" },
+  "publishConfig": { "access": "public", "tag": "alpha" },
   "type": "module",
   "exports": {
     ".": "./src/index.js",
