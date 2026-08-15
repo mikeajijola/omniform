@@ -6,6 +6,7 @@ Omniform defines exactly one company. Its source is Git-friendly YAML, while its
 
 - Capability is primary; actors and implementations may change.
 - Provider selection is per primitive family.
+- The merged Git branch named by `spec.governance.desiredState` is desired-state authority; Omniform contains no shadow runtime copy.
 - Resources are desired instances of primitives.
 - Desired, deployed, and observed state never collapse into one record.
 - Omniform contains no provider SDK calls, UI implementation, model execution, credentials, or runtime state.
@@ -17,7 +18,9 @@ Omniform defines exactly one company. Its source is Git-friendly YAML, while its
 
 The initial schema is deliberately small. Extensions belong under resource `spec` until repeated use proves that they deserve portable semantics.
 
-Capabilities may be high-level declarations with no resources. Advanced declarations may constrain a strategy or name exact resources. Capability realisation is resolved and recorded by OmniSeed at runtime.
+Capabilities may be high-level declarations with no resources. A named Realisation records how a Capability is intentionally assembled from primitive resources and which requirements each participant supplies. Runtime deployment and observation remain OmniSeed state; declaring a Realisation does not prove it works. The legacy inline `realisation` shape remains readable during the alpha migration but new definitions use `spec.realisations` and capability references.
+
+Every real company names a canonical HTTPS Git repository, merged branch, Omniform path, and `pull_request` change mode. These fields identify approved desired state. Commit revisions, check results, deployments, observations, and evidence are runtime facts and therefore do not enter Omniform.
 
 ## Package and validation boundary
 

@@ -35,6 +35,8 @@ export function validateSemantics(input) {
   const capabilities = new Set();
   const capabilityById = new Map();
   const resources = new Set();
+  const resourceById = new Map();
+  const realisations = new Map();
   const globalIds = new Map();
   const unique = (id, path) => {
     if (globalIds.has(id)) issue(path, `duplicates ${globalIds.get(id)}`);
@@ -53,6 +55,7 @@ export function validateSemantics(input) {
   for (const [family, items] of Object.entries(input.spec.resources ?? {})) {
     items.forEach((resource, index) => {
       resources.add(resource.id);
+      resourceById.set(resource.id, { family, resource });
       unique(resource.id, `spec.resources.${family}.${index}.id`);
     });
   }
@@ -61,6 +64,34 @@ export function validateSemantics(input) {
       if (!resources.has(id)) issue(`spec.capabilities.${index}.realisation.resources.${ri}`, `references unknown resource ${id}`);
     });
   });
+  (input.spec.realisations ?? []).forEach((realisation, index) => {
+    unique(realisation.id, `spec.realisations.${index}.id`);
+    realisations.set(realisation.id, realisation);
+    if (!capabilities.has(realisation.capability)) issue(`spec.realisations.${index}.capability`, `references unknown capability ${realisation.capability}`);
+    const capability = capabilityById.get(realisation.capability);
+    const requirements = new Set((capability?.requires ?? []).map(item => item.id));
+    realisation.participants.forEach((participant, pi) => {
+      const resource = resourceById.get(participant.resource);
+      if (!resource) issue(`spec.realisations.${index}.participants.${pi}.resource`, `references unknown resource ${participant.resource}`);
+      participant.supplies?.forEach((requirement, si) => {
+        if (!requirements.has(requirement)) issue(`spec.realisations.${index}.participants.${pi}.supplies.${si}`, `references unknown requirement ${requirement} on capability ${realisation.capability}`);
+        else if (resource && !resource.resource.offers?.includes(requirement)) issue(`spec.realisations.${index}.participants.${pi}.supplies.${si}`, `resource ${participant.resource} does not offer requirement ${requirement}`);
+      });
+    });
+  });
+  input.spec.capabilities.forEach((capability, index) => {
+    capability.realisations?.forEach((id, ri) => {
+      const realisation = realisations.get(id);
+      if (!realisation) issue(`spec.capabilities.${index}.realisations.${ri}`, `references unknown realisation ${id}`);
+      else if (realisation.capability !== capability.id) issue(`spec.capabilities.${index}.realisations.${ri}`, `realisation ${id} belongs to capability ${realisation.capability}`);
+    });
+  });
+  if (input.spec.stewardship) {
+    if (!capabilities.has(input.spec.stewardship.capability)) issue("spec.stewardship.capability", `references unknown capability ${input.spec.stewardship.capability}`);
+    const realisation = realisations.get(input.spec.stewardship.realisation);
+    if (!realisation) issue("spec.stewardship.realisation", `references unknown realisation ${input.spec.stewardship.realisation}`);
+    else if (realisation.capability !== input.spec.stewardship.capability) issue("spec.stewardship.realisation", "must realise the stewardship capability");
+  }
   input.spec.operations.forEach((operation, index) => {
     unique(operation.id, `spec.operations.${index}.id`);
     if (!capabilities.has(operation.capability)) issue(`spec.operations.${index}.capability`, `references unknown capability ${operation.capability}`);
