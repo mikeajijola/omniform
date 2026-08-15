@@ -33,6 +33,7 @@ export function validateSemantics(input) {
   const issues = [];
   const issue = (path, message) => issues.push({ path, message });
   const capabilities = new Set();
+  const capabilityById = new Map();
   const resources = new Set();
   const globalIds = new Map();
   const unique = (id, path) => {
@@ -41,6 +42,7 @@ export function validateSemantics(input) {
   };
   input.spec.capabilities.forEach((capability, index) => {
     capabilities.add(capability.id);
+    capabilityById.set(capability.id, capability);
     unique(capability.id, `spec.capabilities.${index}.id`);
     const requirements = new Set();
     capability.requires.forEach((requirement, ri) => {
@@ -62,6 +64,10 @@ export function validateSemantics(input) {
   input.spec.operations.forEach((operation, index) => {
     unique(operation.id, `spec.operations.${index}.id`);
     if (!capabilities.has(operation.capability)) issue(`spec.operations.${index}.capability`, `references unknown capability ${operation.capability}`);
+    const requiredFamilies = new Set((capabilityById.get(operation.capability)?.requires ?? []).map(item => item.primitiveFamily));
+    operation.providerDependencies?.forEach((family, di) => {
+      if (!requiredFamilies.has(family)) issue(`spec.operations.${index}.providerDependencies.${di}`, `family ${family} is not required by capability ${operation.capability}`);
+    });
   });
   return { valid: issues.length === 0, issues, skipped: false };
 }

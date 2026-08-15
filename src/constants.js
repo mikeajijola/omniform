@@ -1,6 +1,6 @@
 export const primitiveFamilies = Object.freeze([
   "agents", "skills", "connectors", "workflows", "schedules", "policies",
-  "observations", "systems", "memory", "company_search", "identity", "machines"
+  "observations", "memory", "identity", "machines"
 ]);
 
 export const companySearchRequiredOfferings = Object.freeze(["index", "update", "remove", "search", "retrieve"]);
