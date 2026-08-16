@@ -36,7 +36,7 @@ Governed company changes operate on this validated, canonical JSON-compatible ob
 
 ## Company manifestation vocabulary
 
-A **Capability** is what the company needs to be able to do. A **Primitive** is a fundamental kind of thing the company intentionally needs manifested so a Capability can exist. A **Provider** is a replaceable implementation that realises one or more primitive families, selected independently per family. An **Agent** is agency that can act for the company under authority; it may be a person, AI system, deterministic software, service, team, or external organisation. A **Resource** is a desired instance associated with a primitive. **State** records concrete realised facts. An **Observation** is what reality currently reports, and **Evidence** is why OmniSeed believes it.
+A **Capability** is what the company needs to be able to do. A **Primitive** is a fundamental kind of thing the company intentionally needs manifested so a Capability can exist. A **Provider** is the replaceable supplying organisation boundary that realises one or more primitive families, selected independently per family. Products, services, frameworks, SDKs, and features offered by that organisation are implementation choices beneath the Provider, not Providers themselves. An **Agent** is agency that can act for the company under authority; it may be a person, AI system, deterministic software, service, team, or external organisation. A **Resource** is a desired instance associated with a primitive. **State** records concrete realised facts. An **Observation** is what reality currently reports, and **Evidence** is why OmniSeed believes it.
 
 The canonical primitive families are:
 
@@ -52,6 +52,8 @@ The canonical primitive families are:
 - `machines`: active physical capacity capable of affecting the physical world, not every non-human actor or passive asset.
 
 A Provider realises primitive-family requirements. High-level Capabilities compose those requirements and never bind directly to vendors. A package may support several families, but selection remains independent for every family.
+
+Provider answers “Who supplies this implementation capability?” Product/service/framework answers “What are we using from that Provider?” For example, Lily is an Agent implemented using Eve beneath the Vercel Provider; GitHub Actions is a product beneath the GitHub Provider. The ecosystem governance repository owns the authoritative [Provider semantics](https://github.com/mikeajijola/omniseed-ecosystem/blob/main/docs/provider-semantics.md).
 
 Persistent realised resources belong to deployed and observed state; persistence alone does not create a primitive family. The removed `systems` family has no universal replacement.
 

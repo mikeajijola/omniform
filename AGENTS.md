@@ -9,6 +9,7 @@ Read these rules before you learn the code.
 - Omniform describes a company. It does not run one.
 - Capabilities say what the company must be able to do.
 - Providers are choices for how things may be made real.
+- A Provider means the supplying organisation boundary. Products, services, frameworks, SDKs, and features from that organisation stay implementation details beneath it.
 - Do not put vendor behaviour into the core language.
 - Do not say something exists just because it was declared.
 - YAML and JSON must mean the same thing.

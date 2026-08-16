@@ -1,5 +1,7 @@
 # Omniform
 
+Provider identity means the supplying organisation, never merely one of its products, services, frameworks, SDKs, or features. See the ecosystem's authoritative [Provider semantics](https://github.com/mikeajijola/omniseed-ecosystem/blob/main/docs/provider-semantics.md).
+
 Omniform describes one durable company: its implementation-independent Capabilities, named Realisations, canonical primitive participants, independently selected family Providers, governance, and PR-governed Git desired-state authority. It does not run the company or contain observed state.
 
 Omniform is a way to describe one company.
