@@ -35,6 +35,21 @@ test("capabilities compose families and Provider selection remains independent",
   assert.notEqual(valid.spec.providers.workflows.provider, valid.spec.providers.identity.provider);
   assert.equal(valid.spec.resources.agents[0].spec.kind, "person");
 });
+test("primitive instances can select different Providers within one family", () => {
+  const input = structuredCloneWith(valid, value => {
+    value.spec.resources.workflows[0].provider = "github";
+    value.spec.resources.workflows.push({
+      id: "package_registry_release",
+      name: "Package registry release",
+      provider: "npm",
+      offers: ["software_change_manage"]
+    });
+  });
+  assert.equal(validateStructure(input).valid, true);
+  assert.equal(validateSemantics(input).valid, true);
+  assert.equal(input.spec.resources.workflows[0].provider, "github");
+  assert.equal(input.spec.resources.workflows[1].provider, "npm");
+});
 test("named realisations trace capability requirements through primitive resources", () => {
   const capability = valid.spec.capabilities[0];
   const realisation = valid.spec.realisations.find(item => item.id === capability.realisations[0]);

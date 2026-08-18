@@ -74,7 +74,7 @@
     },
     "resource": {
       "type": "object", "required": ["id", "name"], "additionalProperties": false,
-      "properties": { "id": { "$ref": "#/$defs/id" }, "name": { "type": "string", "minLength": 1 }, "offers": { "type": "array", "items": { "$ref": "#/$defs/id" }, "uniqueItems": true }, "risk": { "enum": ["low", "medium", "high"] }, "constraints": { "type": "object" }, "spec": { "type": "object" } }
+      "properties": { "id": { "$ref": "#/$defs/id" }, "name": { "type": "string", "minLength": 1 }, "provider": { "$ref": "#/$defs/id" }, "offers": { "type": "array", "items": { "$ref": "#/$defs/id" }, "uniqueItems": true }, "risk": { "enum": ["low", "medium", "high"] }, "constraints": { "type": "object" }, "spec": { "type": "object" } }
     },
     "resources": {
       "type": "object", "additionalProperties": false,

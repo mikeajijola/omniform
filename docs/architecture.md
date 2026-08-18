@@ -5,7 +5,7 @@ Omniform defines exactly one company. Its source is Git-friendly YAML, while its
 ## Invariants
 
 - Capability is primary; actors and implementations may change.
-- Provider selection is per primitive family.
+- Provider selection is subordinate to primitive instances. `spec.providers` supplies a family default, while a resource-level `provider` selects a different supplying organisation for that particular primitive instance.
 - The merged Git branch named by `spec.governance.desiredState` is desired-state authority; Omniform contains no shadow runtime copy.
 - Resources are desired instances of primitives.
 - Desired, deployed, and observed state never collapse into one record.
@@ -36,7 +36,7 @@ Governed company changes operate on this validated, canonical JSON-compatible ob
 
 ## Company manifestation vocabulary
 
-A **Capability** is what the company needs to be able to do. A **Primitive** is a fundamental kind of thing the company intentionally needs manifested so a Capability can exist. A **Provider** is the replaceable supplying organisation boundary that realises one or more primitive families, selected independently per family. Products, services, frameworks, SDKs, and features offered by that organisation are implementation choices beneath the Provider, not Providers themselves. An **Agent** is agency that can act for the company under authority; it may be a person, AI system, deterministic software, service, team, or external organisation. A **Resource** is a desired instance associated with a primitive. **State** records concrete realised facts. An **Observation** is what reality currently reports, and **Evidence** is why OmniSeed believes it.
+A **Capability** is what the company needs to be able to do. A **Primitive** is a fundamental kind of thing the company intentionally needs manifested so a Capability can exist. A **Provider** is the replaceable supplying organisation boundary that realises one or more primitive families. `spec.providers` declares the default selection for each family; an individual Resource may override that default with `provider` when a realisation composes multiple supplying organisations in the same family. Products, services, frameworks, SDKs, and features offered by that organisation are implementation choices beneath the Provider, not Providers themselves. An **Agent** is agency that can act for the company under authority; it may be a person, AI system, deterministic software, service, team, or external organisation. A **Resource** is a desired instance associated with a primitive. **State** records concrete realised facts. An **Observation** is what reality currently reports, and **Evidence** is why OmniSeed believes it.
 
 The canonical primitive families are:
 
@@ -51,7 +51,7 @@ The canonical primitive families are:
 - `identity`: principals recognised by the company, separate from agency and authorization;
 - `machines`: active physical capacity capable of affecting the physical world, not every non-human actor or passive asset.
 
-A Provider realises primitive-family requirements. High-level Capabilities compose those requirements and never bind directly to vendors. A package may support several families, but selection remains independent for every family.
+A Provider realises primitive-family requirements. High-level Capabilities compose those requirements and never bind directly to vendors. A package may support several families, and different primitive instances in the same family may select different Providers without redefining their Capability. The family map remains a concise default for declarations that need only one Provider in a family.
 
 Provider answers “Who supplies this implementation capability?” Product/service/framework answers “What are we using from that Provider?” For example, Lily is an Agent implemented using Eve beneath the Vercel Provider; GitHub Actions is a product beneath the GitHub Provider. The ecosystem governance repository owns the authoritative [Provider semantics](https://github.com/mikeajijola/omniseed-ecosystem/blob/main/docs/provider-semantics.md).
 
