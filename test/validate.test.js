@@ -7,6 +7,7 @@ import { parseOmniform, primitiveFamilies, validateSemantics, validateStructure 
 const validSource = await readFile(new URL("../examples/omniseed/omniform.yaml", import.meta.url), "utf8");
 const valid = parse(validSource);
 const companySearch = parse(await readFile(new URL("../examples/company.omniform.yaml", import.meta.url), "utf8"));
+const stewardship = parse(await readFile(new URL("../examples/stewardship.omniform.yaml", import.meta.url), "utf8"));
 
 test("valid Omniform passes canonical JSON Schema", () => assert.equal(validateStructure(valid).valid, true));
 test("reference company passes semantic validation", () => assert.equal(validateSemantics(valid).valid, true));
@@ -19,7 +20,7 @@ test("semantic invalid reference passes schema then fails semantics", () => {
   assert.equal(validateSemantics(input).valid, false);
 });
 test("parser runs structural then semantic validation", () => assert.equal(parseOmniform(validSource).metadata.id, "omniseed"));
-test("canonical primitive-family vocabulary contains exactly ten families", () => assert.deepEqual(primitiveFamilies, ["agents", "skills", "connectors", "workflows", "schedules", "policies", "observations", "memory", "identity", "machines"]));
+test("canonical primitive-family vocabulary contains exactly eleven families", () => assert.deepEqual(primitiveFamilies, ["agents", "inference", "skills", "connectors", "workflows", "schedules", "policies", "observations", "memory", "identity", "machines"]));
 test("removed primitive families fail clearly instead of being silently remapped", () => {
   for (const family of ["systems", "company_search"]) {
     const requirement = structuredCloneWith(valid, value => { value.spec.capabilities[0].requires[0].primitiveFamily = family; });
@@ -49,6 +50,34 @@ test("primitive instances can select different Providers within one family", () 
   assert.equal(validateSemantics(input).valid, true);
   assert.equal(input.spec.resources.workflows[0].provider, "github");
   assert.equal(input.spec.resources.workflows[1].provider, "npm");
+});
+test("inference is a replaceable primitive distinct from Agent identity and implementation frameworks", () => {
+  const input = structuredCloneWith(valid, value => {
+    value.spec.providers.inference = { provider: "google" };
+    value.spec.capabilities[0].requires.push({ id: "software_reasoning", primitiveFamily: "inference" });
+    value.spec.resources.inference = [{
+      id: "engineering_inference",
+      name: "Engineering inference",
+      provider: "google",
+      offers: ["software_reasoning"],
+      spec: { product: "Gemini API", model: "gemini-2.5-flash" }
+    }];
+    value.spec.realisations[0].participants.push({ resource: "engineering_inference", supplies: ["software_reasoning"] });
+  });
+  assert.equal(validateStructure(input).valid, true);
+  assert.equal(validateSemantics(input).valid, true);
+  assert.equal(input.spec.resources.agents[0].spec.kind, "person");
+  assert.equal(input.spec.resources.inference[0].provider, "google");
+});
+test("stewardship example keeps actor, inference, framework, model and Provider distinct", () => {
+  assert.equal(validateStructure(stewardship).valid, true);
+  assert.equal(validateSemantics(stewardship).valid, true);
+  const actor = stewardship.spec.resources.agents[0];
+  const inference = stewardship.spec.resources.inference[0];
+  assert.equal(actor.spec.implementation.framework, "LiteLLM");
+  assert.equal(inference.provider, "google");
+  assert.equal(inference.spec.product, "Gemini API");
+  assert.equal(inference.spec.model, "gemini-2.5-flash");
 });
 test("named realisations trace capability requirements through primitive resources", () => {
   const capability = valid.spec.capabilities[0];

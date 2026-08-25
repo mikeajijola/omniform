@@ -14,7 +14,7 @@
   "$defs": {
     "id": { "type": "string", "pattern": "^[a-z][a-z0-9]*(?:_[a-z0-9]+)*$" },
     "jsonSchema": { "type": "object" },
-    "primitiveFamily": { "enum": ["agents", "skills", "connectors", "workflows", "schedules", "policies", "observations", "memory", "identity", "machines"] },
+    "primitiveFamily": { "enum": ["agents", "inference", "skills", "connectors", "workflows", "schedules", "policies", "observations", "memory", "identity", "machines"] },
     "metadata": {
       "type": "object", "required": ["id", "name"], "additionalProperties": false,
       "properties": { "id": { "$ref": "#/$defs/id" }, "name": { "type": "string", "minLength": 1 }, "labels": { "type": "object", "additionalProperties": { "type": "string" } } }
@@ -26,7 +26,7 @@
     "providerMap": {
       "type": "object", "minProperties": 1, "additionalProperties": false,
       "properties": {
-        "agents": { "$ref": "#/$defs/providerSelection" }, "skills": { "$ref": "#/$defs/providerSelection" }, "connectors": { "$ref": "#/$defs/providerSelection" },
+        "agents": { "$ref": "#/$defs/providerSelection" }, "inference": { "$ref": "#/$defs/providerSelection" }, "skills": { "$ref": "#/$defs/providerSelection" }, "connectors": { "$ref": "#/$defs/providerSelection" },
         "workflows": { "$ref": "#/$defs/providerSelection" }, "schedules": { "$ref": "#/$defs/providerSelection" }, "policies": { "$ref": "#/$defs/providerSelection" },
         "observations": { "$ref": "#/$defs/providerSelection" }, "memory": { "$ref": "#/$defs/providerSelection" },
         "identity": { "$ref": "#/$defs/providerSelection" }, "machines": { "$ref": "#/$defs/providerSelection" }
@@ -79,7 +79,7 @@
     "resources": {
       "type": "object", "additionalProperties": false,
       "properties": {
-        "agents": { "$ref": "#/$defs/resourceList" }, "skills": { "$ref": "#/$defs/resourceList" }, "connectors": { "$ref": "#/$defs/resourceList" }, "workflows": { "$ref": "#/$defs/resourceList" },
+        "agents": { "$ref": "#/$defs/resourceList" }, "inference": { "$ref": "#/$defs/resourceList" }, "skills": { "$ref": "#/$defs/resourceList" }, "connectors": { "$ref": "#/$defs/resourceList" }, "workflows": { "$ref": "#/$defs/resourceList" },
         "schedules": { "$ref": "#/$defs/resourceList" }, "policies": { "$ref": "#/$defs/resourceList" }, "observations": { "$ref": "#/$defs/resourceList" },
         "memory": { "$ref": "#/$defs/resourceList" }, "identity": { "$ref": "#/$defs/resourceList" }, "machines": { "$ref": "#/$defs/resourceList" }
       }
