@@ -1,5 +1,5 @@
 export const primitiveFamilies = Object.freeze([
-  "agents", "skills", "connectors", "workflows", "schedules", "policies",
+  "agents", "inference", "skills", "connectors", "workflows", "schedules", "policies",
   "observations", "memory", "identity", "machines"
 ]);
 

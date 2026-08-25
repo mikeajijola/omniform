@@ -1,0 +1,62 @@
+apiVersion: omniform.org/v1alpha1
+kind: Company
+metadata: { id: example_company, name: Example Company }
+spec:
+  governance:
+    desiredState:
+      repository: https://github.com/example/example-company.git
+      branch: main
+      path: omniform.yaml
+      changeMode: pull_request
+  providers:
+    agents: { provider: example_company }
+    inference: { provider: google }
+    policies: { provider: example_company }
+  capabilities:
+    - id: company_stewardship
+      name: Company Stewardship
+      requires:
+        - { id: stewardship_agency, primitiveFamily: agents }
+        - { id: language_reasoning, primitiveFamily: inference }
+        - { id: governed_authority, primitiveFamily: policies }
+      realisations: [primary_stewardship]
+  realisations:
+    - id: primary_stewardship
+      name: Primary stewardship
+      capability: company_stewardship
+      participants:
+        - { resource: steward, role: steward, supplies: [stewardship_agency] }
+        - { resource: steward_inference, supplies: [language_reasoning] }
+        - { resource: steward_policy, supplies: [governed_authority] }
+  resources:
+    agents:
+      - id: steward
+        name: Company Steward
+        offers: [stewardship_agency]
+        spec:
+          kind: ai_agent
+          implementation: { framework: LiteLLM }
+    inference:
+      - id: steward_inference
+        name: Steward inference
+        provider: google
+        offers: [language_reasoning]
+        spec:
+          product: Gemini API
+          model: gemini-2.5-flash
+          credentialReference: GEMINI_API_KEY
+    policies:
+      - id: steward_policy
+        name: Steward authority
+        offers: [governed_authority]
+        spec: { deny: [approve, self_escalate, direct_provider_mutation] }
+  operations:
+    - id: inspect_company
+      capability: company_stewardship
+      description: Inspect current company truth.
+      input: { type: object }
+      output: { type: object }
+      mutation: false
+      permissions: [company.read]
+      approval: none
+      interfaces: [agent, api, ui]

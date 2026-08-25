@@ -41,6 +41,7 @@ A **Capability** is what the company needs to be able to do. A **Primitive** is 
 The canonical primitive families are:
 
 - `agents`: agency that can act on behalf of the company;
+- `inference`: provisioned computational inference that can be selected, invoked, replaced, and observed independently of the actor using it;
 - `skills`: abilities available to an agent, distinct from company Capabilities;
 - `connectors`: governed reach across a boundary, not merely APIs;
 - `workflows`: actor-neutral progression of coordinated work through steps or states;
@@ -52,6 +53,8 @@ The canonical primitive families are:
 - `machines`: active physical capacity capable of affecting the physical world, not every non-human actor or passive asset.
 
 A Provider realises primitive-family requirements. High-level Capabilities compose those requirements and never bind directly to vendors. A package may support several families, and different primitive instances in the same family may select different Providers without redefining their Capability. The family map remains a concise default for declarations that need only one Provider in a family.
+
+Inference stays distinct from agency and implementation tooling. An Agent is the governed actor; an inference Resource is computational inference that the actor or another realisation participant may use. The Provider is the supplying organisation, while its API, model catalogue, model identifier, SDK, gateway, or framework belongs beneath that Provider in Resource `spec`. For example, Lily may participate as an `agents` Resource, use an `inference` Resource supplied by Google through the Gemini API, and run integration code implemented with LiteLLM. Neither Gemini nor LiteLLM becomes a Provider or the Lily actor.
 
 Provider answers “Who supplies this implementation capability?” Product/service/framework answers “What are we using from that Provider?” For example, Lily is an Agent implemented using Eve beneath the Vercel Provider; GitHub Actions is a product beneath the GitHub Provider. The ecosystem governance repository owns the authoritative [Provider semantics](https://github.com/mikeajijola/omniseed-ecosystem/blob/main/docs/provider-semantics.md).
 
