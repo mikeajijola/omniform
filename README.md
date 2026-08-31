@@ -105,4 +105,4 @@ A change to the Omniform language can affect [OmniSeed](https://github.com/mikea
 
 Omniform is in Generation 1 and early development.
 
-Licensing has not been decided. The package does not declare a license yet.
+Omniform is licensed under the Apache License 2.0. See [LICENSE](LICENSE).
