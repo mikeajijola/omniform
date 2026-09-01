@@ -91,6 +91,18 @@ export function validateSemantics(input) {
     const realisation = realisations.get(input.spec.stewardship.realisation);
     if (!realisation) issue("spec.stewardship.realisation", `references unknown realisation ${input.spec.stewardship.realisation}`);
     else if (realisation.capability !== input.spec.stewardship.capability) issue("spec.stewardship.realisation", "must realise the stewardship capability");
+    const autonomy = input.spec.stewardship.autonomy;
+    if (autonomy) {
+      const dutyByPermission = new Map();
+      autonomy.duties.forEach((duty, index) => duty.permissions.forEach(permission => {
+        if (dutyByPermission.has(permission)) issue(`spec.stewardship.autonomy.duties.${index}.permissions`, `${permission} is assigned more than once`);
+        else dutyByPermission.set(permission, duty.actor);
+      }));
+      for (const permission of ["propose", "approve", "merge", "apply", "observe"]) if (!dutyByPermission.has(permission)) issue("spec.stewardship.autonomy.duties", `must assign ${permission}`);
+      if (dutyByPermission.get("propose") === dutyByPermission.get("approve")) issue("spec.stewardship.autonomy.duties", "proposer and independent approver must be different actors");
+      if (autonomy.mode !== "recommend" && !autonomy.expiresAt) issue("spec.stewardship.autonomy.expiresAt", "is required for autonomous modes");
+      if (autonomy.activeFrom && autonomy.expiresAt && Date.parse(autonomy.activeFrom) >= Date.parse(autonomy.expiresAt)) issue("spec.stewardship.autonomy.expiresAt", "must be later than activeFrom");
+    }
   }
   input.spec.operations.forEach((operation, index) => {
     unique(operation.id, `spec.operations.${index}.id`);

@@ -8,6 +8,25 @@ spec:
       branch: main
       path: omniform.yaml
       changeMode: pull_request
+  stewardship:
+    capability: company_stewardship
+    realisation: primary_stewardship
+    autonomy:
+      mode: autonomous_safe
+      activeFrom: 2026-09-01T00:00:00Z
+      expiresAt: 2026-09-02T00:00:00Z
+      stateReference: stewardship_control
+      triggers: [owner_request, interval, observed_drift, capability_gap, failed_operation]
+      limits: { concurrency: 2, dailyChanges: 5, repairRounds: 2, actions: 20 }
+      gates: { validation: true, independentReview: true, unchangedHead: true, successfulChecks: true }
+      protectedCategories: [authority, governance, secrets, destructive_actions, spending_limits, autonomy_policy]
+      duties:
+        - { actor: steward, permissions: [propose] }
+        - { actor: independent_reviewer, permissions: [approve] }
+        - { actor: change_executor, permissions: [merge] }
+        - { actor: reconciliation_executor, permissions: [apply] }
+        - { actor: observer, permissions: [observe] }
+      afterMerge: { reconcile: true, observe: true }
   providers:
     agents: { provider: example_company }
     inference: { provider: google }
