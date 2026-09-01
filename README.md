@@ -99,6 +99,12 @@ Start with [`examples/company.omniform.yaml`](examples/company.omniform.yaml). U
 
 Read [`docs/architecture.md`](docs/architecture.md) for the exact Provider model, file rules, IDs, validation, resources, operations, and package boundary.
 
+## Autonomous stewardship profiles
+
+`spec.stewardship.autonomy` declares company policy, never an executor or credential. `recommend` may be left without an expiry because it cannot authorize execution. `autonomous_safe` and `autonomous` require a finite `expiresAt`, an operator-controlled state reference, explicit triggers and limits, all four safety gates, protected change categories, separately assigned duties, and reconciliation plus observation after merge. The proposer and independent approver must be different actors.
+
+The complete `autonomous_safe` example is [`examples/stewardship.omniform.yaml`](examples/stewardship.omniform.yaml). A recommend-only variant changes `mode` to `recommend` and may omit the time window. A time-bounded autonomous variant changes `mode` to `autonomous` while retaining `expiresAt`; it does not weaken validation, independent exact-head review, passing checks, separation of duties, or protected-category approval.
+
 A change to the Omniform language can affect [OmniSeed](https://github.com/mikeajijola/omniseed) and [OmniSeed OS](https://github.com/mikeajijola/omniseedos). Check all three projects before releasing that kind of change.
 
 ## Project status

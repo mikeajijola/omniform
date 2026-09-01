@@ -79,6 +79,23 @@ test("stewardship example keeps actor, inference, framework, model and Provider 
   assert.equal(inference.spec.product, "Gemini API");
   assert.equal(inference.spec.model, "gemini-2.5-flash");
 });
+test("stewardship autonomy is bounded and separates proposing from independent approval", () => {
+  assert.equal(validateStructure(stewardship).valid, true);
+  assert.equal(validateSemantics(stewardship).valid, true);
+  const selfApproval = structuredCloneWith(stewardship, value => { value.spec.stewardship.autonomy.duties[1].actor = "steward"; });
+  assert.match(validateSemantics(selfApproval).issues[0].message, /different actors/);
+  const missingExpiry = structuredCloneWith(stewardship, value => { delete value.spec.stewardship.autonomy.expiresAt; });
+  assert.match(validateSemantics(missingExpiry).issues[0].message, /required for autonomous/);
+  const invalidLimit = structuredCloneWith(stewardship, value => { value.spec.stewardship.autonomy.limits.concurrency = 0; });
+  assert.equal(validateStructure(invalidLimit).valid, false);
+  const protectedMissing = structuredCloneWith(stewardship, value => { value.spec.stewardship.autonomy.protectedCategories = []; });
+  assert.equal(validateStructure(protectedMissing).valid, false);
+});
+test("legacy stewardship declarations remain valid", () => {
+  const legacy = structuredCloneWith(stewardship, value => { delete value.spec.stewardship.autonomy; });
+  assert.equal(validateStructure(legacy).valid, true);
+  assert.equal(validateSemantics(legacy).valid, true);
+});
 test("named realisations trace capability requirements through primitive resources", () => {
   const capability = valid.spec.capabilities[0];
   const realisation = valid.spec.realisations.find(item => item.id === capability.realisations[0]);
