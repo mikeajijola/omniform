@@ -1,0 +1,24 @@
+{
+  "schemaVersion": 1,
+  "package": "@omniseed/omniform",
+  "version": "1.0.0-alpha.7",
+  "channel": "alpha",
+  "capability": "bounded-autonomous-stewardship-declaration",
+  "sourceIssue": "mikeajijola/omniform#27",
+  "contractIssue": "mikeajijola/omniform#25",
+  "requiredGates": [
+    "validation",
+    "independent_review",
+    "unchanged_head",
+    "successful_checks"
+  ],
+  "publication": {
+    "status": "pending_post_merge",
+    "workflow": ".github/workflows/publish.yml",
+    "ref": "main"
+  },
+  "downstream": {
+    "specifier": "@omniseed/omniform@1.0.0-alpha.7",
+    "blockedUntilPublished": true
+  }
+}

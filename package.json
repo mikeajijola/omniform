@@ -1,10 +1,16 @@
 {
   "name": "@omniseed/omniform",
-  "version": "1.0.0-alpha.6",
+  "version": "1.0.0-alpha.7",
   "description": "The open Company-as-Code language and organisational commons.",
   "license": "Apache-2.0",
-  "repository": { "type": "git", "url": "https://github.com/mikeajijola/omniform.git" },
-  "publishConfig": { "access": "public", "tag": "alpha" },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/mikeajijola/omniform.git"
+  },
+  "publishConfig": {
+    "access": "public",
+    "tag": "alpha"
+  },
   "type": "module",
   "exports": {
     ".": "./src/index.js",
@@ -12,6 +18,7 @@
   },
   "scripts": {
     "test": "node --test",
+    "test:consumer": "node test/clean-consumer.js",
     "validate": "node ./src/cli.js validate",
     "check": "npm test"
   },
